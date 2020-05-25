@@ -3,6 +3,7 @@
 This repo contains code snippets that can be shared across documentation
 and to be run by our lovely customers.
 
+
 ## Files structure
 
 Repo contains two main entry points:
@@ -23,3 +24,45 @@ you intered in for some examples.
 This folder is for a related content on different languages which should be 
 stored within some common folder. For example some set of configuration files
 for initial product setup, etc.
+
+
+## Reveal content from this repo inside docs repo
+
+### Reveal content in docs repo by name
+
+To add the content from this repo inside docs repo, just plug such code
+snippet inside `.mdx` page whenever this needed.
+
+```jsx
+<CodeFromFile>
+`inbound-integration`
+</CodeFromFile>
+```
+
+`inbound-integration` here marks an id name that will be searched across
+`content-by-language/**/inbound-integration.*` path. All the matched result
+will be rendered as an appropriate code blocks separated by tabs.
+
+### Reveal content in docs repo by specific folder
+
+To add all the content from specific folder to docs repo, just plug next code snippet into
+the specific `.mdx` file:
+
+```jsx
+<CodeFromFile options={{ isMixedContent: true }}>
+`inbound-integration`
+</CodeFromFile>
+```
+
+### [Is Coming Soon] Reveal partial content in docs repo (specific lines range for a file)
+
+```jsx
+<CodeFromFile options={{ lines: { "inbound-integration.js": [10, 20]} }}>
+`inbound-integration`
+</CodeFromFile>
+```
+
+In such case for dedicated `.js` file only these specific lines range will be shown. For other
+files that are not mentioned in this config all the content will be shown by default.
+
+For more information on integration with a Docs repo, please refer [here](https://github.com/verygoodsecurity/docs/blob/master/README.md)
