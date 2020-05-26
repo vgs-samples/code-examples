@@ -34,9 +34,9 @@ To add the content from this repo inside docs repo, just plug such code
 snippet inside `.mdx` page whenever this needed.
 
 ```jsx
-<CodeFromFile>
+<CodeFrom>
 `inbound-integration`
-</CodeFromFile>
+</CodeFrom>
 ```
 
 `inbound-integration` here marks an id name that will be searched across
@@ -49,17 +49,17 @@ To add all the content from specific folder to docs repo, just plug next code sn
 the specific `.mdx` file:
 
 ```jsx
-<CodeFromFile options={{ isMixedContent: true }}>
+<CodeFrom options={{ isMixedContent: true }}>
 `inbound-integration`
-</CodeFromFile>
+</CodeFrom>
 ```
 
 ### [Is Coming Soon] Reveal partial content in docs repo (specific lines range for a file)
 
 ```jsx
-<CodeFromFile options={{ lines: { "inbound-integration.js": [10, 20]} }}>
+<CodeFrom options={{ lines: { "inbound-integration.js": [10, 20]} }}>
 `inbound-integration`
-</CodeFromFile>
+</CodeFrom>
 ```
 
 In such case for dedicated `.js` file only these specific lines range will be shown. For other
