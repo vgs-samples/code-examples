@@ -3,7 +3,7 @@ require 'json'
 require 'net/http'
 require 'net/https'
 
-proxy = URI.parse('{forwardProxyURL}')
+proxy = URI.parse('{FORWARD_PROXY_URL}')
 uri = URI.parse('https://echo.apps.verygood.systems/post')
 http = Net::HTTP.new(uri.host, uri.port, proxy.host, proxy.port, proxy.user, proxy.password)
 http.use_ssl = true

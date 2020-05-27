@@ -11,9 +11,9 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 const tunnelingAgent = tunnel.httpsOverHttp({
   ca: [ fs.readFileSync('path/to/cert.pem')],
   proxy: {
-    host: '{vaultIdentifier}.sandbox.verygoodproxy.com',
-    port: 8080,
-    proxyAuth: '{username}:{password}'
+    host: '{VAULT_IDENTIFIER}.sandbox.verygoodproxy.com',
+    port: '{PORT}',
+    proxyAuth: '{USERNAME}:{PASSWORD}'
   }
 });
 

@@ -22,7 +22,7 @@ import javax.net.ssl.SSLContext;
 public class App {
 public static void main(String[] args) throws IOException, GeneralSecurityException {
 
-  final String proxyHost = "{vaultIdentifier}.sandbox.verygoodproxy.com";
+  final String proxyHost = "{VAULT_IDENTIFIER}.sandbox.verygoodproxy.com";
   final int proxyPort = {port};
   final String proxyUser = {username};
   final String proxyPassword = {password};
