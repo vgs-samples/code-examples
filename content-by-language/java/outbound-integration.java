@@ -23,9 +23,9 @@ public class App {
 public static void main(String[] args) throws IOException, GeneralSecurityException {
 
   final String proxyHost = "{VAULT_IDENTIFIER}.sandbox.verygoodproxy.com";
-  final int proxyPort = {port};
-  final String proxyUser = {username};
-  final String proxyPassword = {password};
+  final int proxyPort = {PORT};
+  final String proxyUser = {USERNAME};
+  final String proxyPassword = {PASSWORD};
   HttpHost proxy = new HttpHost(proxyHost, proxyPort);
 
   CredentialsProvider provider = new BasicCredentialsProvider();
@@ -41,7 +41,7 @@ public static void main(String[] args) throws IOException, GeneralSecurityExcept
 
   HttpPost httpPost = new HttpPost("https://echo.apps.verygood.systems/post");
   httpPost.setHeader("Content-Type", "application/json");
-  httpPost.setEntity(new StringEntity("{\"account_number\":\"ALIAS\"}"));
+  httpPost.setEntity(new StringEntity("{\"account_number\":\"{ALIAS}\"}"));
 
   CloseableHttpResponse response = client.execute(httpPost);
 

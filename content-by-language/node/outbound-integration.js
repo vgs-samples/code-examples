@@ -9,25 +9,30 @@ const tunnel = require('tunnel');
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const tunnelingAgent = tunnel.httpsOverHttp({
-  ca: [ fs.readFileSync('path/to/cert.pem')],
+  ca: [fs.readFileSync('path/to/cert.pem')],
   proxy: {
     host: '{VAULT_IDENTIFIER}.sandbox.verygoodproxy.com',
     port: '{PORT}',
-    proxyAuth: '{USERNAME}:{PASSWORD}'
-  }
+    proxyAuth: '{USERNAME}:{PASSWORD}',
+  },
 });
 
-request({
-  url: 'https://echo.apps.verygood.systems/post',
-  method: 'POST',
-  headers: {'Content-Type': 'application/json'},
-  agent: tunnelingAgent,
-  body: JSON.stringify({'secret' : 'ALIAS'})
-}, function(error, response, body){
-  if(error) {
-    console.log(error);
-  } else {
-    console.log('Status:', response.statusCode);
-    console.log(JSON.parse(body));
+request(
+  {
+    url: 'https://echo.apps.verygood.systems/post',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    agent: tunnelingAgent,
+    body: JSON.stringify({
+      account_number: '{ALIAS}',
+    }),
+  },
+  function(error, response, body) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Status:', response.statusCode);
+      console.log(JSON.parse(body));
+    }
   }
-});
+);
