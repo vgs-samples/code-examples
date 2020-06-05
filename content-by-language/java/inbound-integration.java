@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 public class App {
 public static void main(String[] args) throws IOException {
   CloseableHttpClient client = HttpClients.createDefault();
-  HttpPost httpPost = new HttpPost("{REVERSE_PROXY}/post");
+  HttpPost httpPost = new HttpPost("{VAULT_URL}/post");
   httpPost.setEntity(new StringEntity("{"account_number":"account_value"}"));
   httpPost.setHeader("Content-Type", "application/json");
 
