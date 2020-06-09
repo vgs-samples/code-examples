@@ -3,8 +3,8 @@ require 'json'
 require 'net/http'
 require 'net/https'
 
-proxy = URI.parse('{FORWARD_PROXY_URL}')
-uri = URI.parse('https://echo.apps.verygood.systems/post')
+proxy = URI.parse('{ACCESS_CREDENTIALS}@{VAULT_HOST}:{PORT}')
+uri = URI.parse('{VGS_SAMPLE_ECHO_SERVER}/post')
 http = Net::HTTP.new(uri.host, uri.port, proxy.host, proxy.port, proxy.user, proxy.password)
 http.use_ssl = true
 http.ca_file = '/full/path/to/cert.pem'

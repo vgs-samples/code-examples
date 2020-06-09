@@ -22,7 +22,7 @@ import javax.net.ssl.SSLContext;
 public class App {
 public static void main(String[] args) throws IOException, GeneralSecurityException {
 
-  final String proxyHost = "{VAULT_IDENTIFIER}.sandbox.verygoodproxy.com";
+  final String proxyHost = "{VAULT_HOST}";
   final int proxyPort = {PORT};
   final String proxyUser = {USERNAME};
   final String proxyPassword = {PASSWORD};
@@ -39,7 +39,7 @@ public static void main(String[] args) throws IOException, GeneralSecurityExcept
     .setSSLContext(buildSSLContext())
     .build();
 
-  HttpPost httpPost = new HttpPost("https://echo.apps.verygood.systems/post");
+  HttpPost httpPost = new HttpPost("{VGS_SAMPLE_ECHO_SERVER}/post");
   httpPost.setHeader("Content-Type", "application/json");
   httpPost.setEntity(new StringEntity("{\"account_number\":\"{ALIAS}\"}"));
 

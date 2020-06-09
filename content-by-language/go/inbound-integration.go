@@ -23,7 +23,7 @@ if err != nil {
 
 body := bytes.NewReader(payloadBytes)
 
-req, err := http.NewRequest("POST", "https://{VAULT_IDENTIFIER}.SANDBOX.verygoodproxy.com/post", body)
+req, err := http.NewRequest("POST", "{VAULT_URL}/post", body)
 if err != nil {
   log.Fatal(err)
 }
