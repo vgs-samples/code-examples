@@ -1,6 +1,7 @@
 const fs = require('fs');
-const request = require('request');
-const tunnel = require('tunnel');
+const url = require('url');
+const fetch = require('node-fetch');
+const HttpsProxyAgent = require('https-proxy-agent');
 
 /**
  * NODE_TLS_REJECT_UNAUTHORIZED used to allow self signed certificate
@@ -8,31 +9,29 @@ const tunnel = require('tunnel');
  */
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-const tunnelingAgent = tunnel.httpsOverHttp({
+const urlParams = url.parse('http://{ACCESS_CREDENTIALS}@{VAULT_HOST}:{PORT}');
+const agent = new HttpsProxyAgent({
+  ...urlParams,
   ca: [fs.readFileSync('path/to/cert.pem')],
-  proxy: {
-    host: '{VAULT_HOST}',
-    port: '{PORT}',
-    proxyAuth: '{ACCESS_CREDENTIALS}',
-  },
 });
 
-request(
-  {
-    url: 'https://echo.apps.verygood.systems/post',
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    agent: tunnelingAgent,
-    body: JSON.stringify({
-      account_number: '{ALIAS}',
-    }),
-  },
-  function(error, response, body) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Status:', response.statusCode);
-      console.log(JSON.parse(body));
-    }
+async function getData() {
+  let result;
+
+  try {
+    result = await fetch('https://echo.apps.verygood.systems/post', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        account_number: '{ALIAS}',
+      }),
+      agent,
+    });
+  } catch (e) {
+    console.error(e);
   }
-);
+
+  return await result.json();
+}
+
+getData().then(response => console.log(response));
