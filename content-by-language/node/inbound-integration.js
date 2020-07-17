@@ -11,7 +11,6 @@ request(
     if (error) {
       console.log(error);
     } else {
-      console.log('Status:', response.statusCode);
       console.log(JSON.parse(body));
     }
   }
