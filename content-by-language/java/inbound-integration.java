@@ -1,23 +1,21 @@
-import org.apache.commons.io.IOUtils;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+package com.verygoodsecurity;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
-public class App {
-public static void main(String[] args) throws IOException {
-  CloseableHttpClient client = HttpClients.createDefault();
-  HttpPost httpPost = new HttpPost("{VAULT_URL}/post");
-  httpPost.setEntity(new StringEntity("{"account_number":"account_value"}"));
-  httpPost.setHeader("Content-Type", "application/json");
+public class InboundIntegration {
+  public static void main(String[] args) throws IOException, InterruptedException {
+    final HttpClient client = HttpClient.newBuilder().build();
+    final HttpRequest request = HttpRequest.newBuilder()
+        .uri(URI.create("https://tntsfeqzp4a.sandbox.verygoodproxy.com/post"))
+        .header("Content-Type", "application/json")
+        .POST(HttpRequest.BodyPublishers.ofString("{\"account_number\":\"ACC00000000000000000\"}"))
+        .build();
+    final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-  CloseableHttpResponse response = client.execute(httpPost);
-  String content = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
-  System.out.println("response=" + content);
-  client.close();
-}
+    System.out.println("response=" + response.body());
+  }
 }
