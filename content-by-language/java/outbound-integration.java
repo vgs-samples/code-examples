@@ -24,10 +24,10 @@ import javax.net.ssl.SSLContext;
 
 public class OutboundIntegration {
   public static void main(String[] args) throws IOException, GeneralSecurityException {
-    final String proxyHost = "tntsfeqzp4a.sandbox.verygoodproxy.com";
-    final int proxyPort = 8080;
-    final String proxyUser = "USiyQvWcT7wcpy8gvFb1GVmz";
-    final String proxyPassword = "2b48a642-615a-4b3c-8db5-e02a88147174";
+    final String proxyHost = "{VAULT_URL}";
+    final int proxyPort = {PORT};
+    final String proxyUser = "{USERNAME}";
+    final String proxyPassword = "{PASSWORD}";
     final HttpHost proxy = new HttpHost(proxyHost, proxyPort);
 
     final CredentialsProvider provider = new BasicCredentialsProvider();
@@ -41,7 +41,7 @@ public class OutboundIntegration {
         .setSSLContext(buildSSLContext())
         .build();
 
-    final HttpPost httpPost = new HttpPost("https://echo.apps.verygood.systems/post");
+    final HttpPost httpPost = new HttpPost("{VGS_SAMPLE_ECHO_SERVER}/post");
     httpPost.setHeader("Content-Type", "application/json");
     httpPost.setEntity(new StringEntity("{\"account_number\":\"tok_sandbox_oTktJmBaAhUyGHnNJt7WMA\"}"));
 

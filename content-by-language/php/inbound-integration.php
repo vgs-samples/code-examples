@@ -1,5 +1,5 @@
 <?php
-$url = "https://tntsfeqzp4a.sandbox.verygoodproxy.com/post";
+$url = "{VAULT_URL}/post";
 $data = json_encode(array("account_number" => "ACC00000000000000000"));
 
 $cURL = curl_init();

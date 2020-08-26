@@ -1,8 +1,8 @@
 <?php
-$url = 'https://echo.apps.verygood.systems/post';
+$url = '{VGS_SAMPLE_ECHO_SERVER}/post';
 $data = json_encode(array('account_number' => 'tok_sandbox_w8CBfH8vyYL2xWSmMWe3Ds'));
-$proxy = 'tntsfeqzp4a.sandbox.verygoodproxy.com:8080';
-$proxyauth = 'USiyQvWcT7wcpy8gvFb1GVmz:2b48a642-615a-4b3c-8db5-e02a88147174';
+$proxy = '{VAULT_URL}:{PORT}';
+$proxyauth = '{ACCESS_CREDENTIALS}';
 $certpath = '../../mixed-content/sandbox_cert.pem';
 
 $cURL = curl_init();

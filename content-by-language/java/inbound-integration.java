@@ -10,7 +10,7 @@ public class InboundIntegration {
   public static void main(String[] args) throws IOException, InterruptedException {
     final HttpClient client = HttpClient.newBuilder().build();
     final HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create("https://tntsfeqzp4a.sandbox.verygoodproxy.com/post"))
+        .uri(URI.create("{VAULT_URL}/post"))
         .header("Content-Type", "application/json")
         .POST(HttpRequest.BodyPublishers.ofString("{\"account_number\":\"ACC00000000000000000\"}"))
         .build();

@@ -23,7 +23,7 @@ func main() {
 
   body := bytes.NewReader(payloadBytes)
 
-  req, err := http.NewRequest("POST", "https://tntsfeqzp4a.sandbox.verygoodproxy.com/post", body)
+  req, err := http.NewRequest("POST", "{VAULT_URL}/post", body)
   if err != nil {
     log.Fatal(err)
   }

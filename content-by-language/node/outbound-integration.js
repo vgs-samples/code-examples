@@ -7,7 +7,7 @@ const HttpsProxyAgent = require('https-proxy-agent');
  * setting it to 0 on live environments is insecure
  */
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-const urlParams = url.parse('http://USiyQvWcT7wcpy8gvFb1GVmz:2b48a642-615a-4b3c-8db5-e02a88147174@tntsfeqzp4a.sandbox.verygoodproxy.com:8080');
+const urlParams = url.parse('http://{ACCESS_CREDENTIALS}@{VAULT_HOST}:{PORT}');
 const agent = new HttpsProxyAgent({
   ...urlParams,
   ca: [fs.readFileSync('../../mixed-content/sandbox_cert.pem')],
@@ -15,7 +15,7 @@ const agent = new HttpsProxyAgent({
 async function getData() {
   let result;
   try {
-    result = await fetch('https://echo.apps.verygood.systems/post', {
+    result = await fetch('{VGS_SAMPLE_ECHO_SERVER}/post', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

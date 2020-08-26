@@ -2,7 +2,7 @@ require 'uri'
 require 'json'
 require 'net/https'
 
-uri = URI.parse('https://tntsfeqzp4a.sandbox.verygoodproxy.com/post')
+uri = URI.parse('{VAULT_URL}/post')
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true
 request = Net::HTTP::Post.new(uri.path, initheader = {'Content-Type' =>'application/json'})

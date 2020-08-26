@@ -3,8 +3,8 @@ require 'json'
 require 'net/http'
 require 'net/https'
 
-proxy = URI.parse('https://USiyQvWcT7wcpy8gvFb1GVmz:2b48a642-615a-4b3c-8db5-e02a88147174@tntsfeqzp4a.sandbox.verygoodproxy.com:8080')
-uri = URI.parse('https://echo.apps.verygood.systems/post')
+proxy = URI.parse('https://{ACCESS_CREDENTIALS}@{VAULT_HOST}:{PORT}')
+uri = URI.parse('{VGS_SAMPLE_ECHO_SERVER}/post')
 http = Net::HTTP.new(uri.host, uri.port, proxy.host, proxy.port, proxy.user, proxy.password)
 http.use_ssl = true
 http.ca_file = '../../mixed-content/sandbox_cert.pem'

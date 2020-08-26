@@ -18,7 +18,7 @@ type Payload struct {
 
 func main() {
   // You can set the proxy as an HTTPS env variable proxyUrl and go will use by default:
-  os.Setenv("HTTPS_PROXY", "USiyQvWcT7wcpy8gvFb1GVmz:2b48a642-615a-4b3c-8db5-e02a88147174@tntsfeqzp4a.sandbox.verygoodproxy.com:8080")
+  os.Setenv("HTTPS_PROXY", "{ACCESS_CREDENTIALS}@{VAULT_HOST}:{PORT}")
 
   data := Payload{
     Account: "tok_sandbox_oTktJmBaAhUyGHnNJt7WMA",
@@ -47,7 +47,7 @@ func main() {
     },
   }
 
-  req, err := http.NewRequest("POST", "https://echo.apps.verygood.systems/post", body)
+  req, err := http.NewRequest("POST", "{VGS_SAMPLE_ECHO_SERVER}/post", body)
   if err != nil {
     log.Fatal(err)
   }
