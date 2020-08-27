@@ -12,6 +12,6 @@ http.verify_mode = OpenSSL::SSL::VERIFY_PEER
 http.verify_depth = 5
 
 request = Net::HTTP::Post.new(uri.path, initheader = {'Content-Type' =>'application/json'})
-request.body = {account_number: 'tok_sandbox_w8CBfH8vyYL2xWSmMWe3Ds'}.to_json
+request.body = {account_number: '{ALIAS}'}.to_json
 response = http.request(request)
 puts "Response #{response.code} #{response.message}: #{response.body}"

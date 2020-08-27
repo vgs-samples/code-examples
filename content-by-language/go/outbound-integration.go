@@ -21,7 +21,7 @@ func main() {
   os.Setenv("HTTPS_PROXY", "{ACCESS_CREDENTIALS}@{VAULT_HOST}:{PORT}")
 
   data := Payload{
-    Account: "tok_sandbox_oTktJmBaAhUyGHnNJt7WMA",
+    Account: "{ALIAS}",
   }
   payloadBytes, err := json.Marshal(data)
   if err != nil {

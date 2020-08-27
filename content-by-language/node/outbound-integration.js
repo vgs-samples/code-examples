@@ -19,7 +19,7 @@ async function getData() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        account_number: 'tok_sandbox_w8CBfH8vyYL2xWSmMWe3Ds',
+        account_number: '{ALIAS}',
       }),
       agent,
     });

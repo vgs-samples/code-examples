@@ -43,7 +43,7 @@ public class OutboundIntegration {
 
     final HttpPost httpPost = new HttpPost("{VGS_SAMPLE_ECHO_SERVER}/post");
     httpPost.setHeader("Content-Type", "application/json");
-    httpPost.setEntity(new StringEntity("{\"account_number\":\"tok_sandbox_oTktJmBaAhUyGHnNJt7WMA\"}"));
+    httpPost.setEntity(new StringEntity("{\"account_number\":\"{ALIAS}\"}"));
 
     final CloseableHttpResponse response = client.execute(httpPost);
 
