@@ -3,11 +3,11 @@ require 'json'
 require 'net/http'
 require 'net/https'
 
-proxy = URI.parse('{ACCESS_CREDENTIALS}@{VAULT_HOST}:{PORT}')
+proxy = URI.parse('https://{ACCESS_CREDENTIALS}@{VAULT_HOST}:{PORT}')
 uri = URI.parse('{VGS_SAMPLE_ECHO_SERVER}/post')
 http = Net::HTTP.new(uri.host, uri.port, proxy.host, proxy.port, proxy.user, proxy.password)
 http.use_ssl = true
-http.ca_file = '/full/path/to/cert.pem'
+http.ca_file = '../../mixed-content/sandbox_cert.pem'
 http.verify_mode = OpenSSL::SSL::VERIFY_PEER
 http.verify_depth = 5
 

@@ -8,7 +8,7 @@ async function getData() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        secret: 'secret_value',
+        account_number: 'ACC00000000000000000',
       }),
     });
   } catch (e) {

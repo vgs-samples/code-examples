@@ -1,4 +1,5 @@
 import requests
+
 response = requests.post("{VAULT_URL}/post",
-                          json={'account_number': 'account_value'})
-print(str(response.content))
+                          json={'account_number': 'ACC00000000000000000'})
+print(str(response.json()))
