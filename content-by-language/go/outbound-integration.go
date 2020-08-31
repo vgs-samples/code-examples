@@ -30,7 +30,7 @@ func main() {
 
   body := bytes.NewReader(payloadBytes)
 
-  caCert, err := ioutil.ReadFile("../../mixed-content/sandbox_cert.pem")
+  caCert, err := ioutil.ReadFile("{CERT_LOCATION}")
   if err != nil {
     log.Fatal(err)
   }

@@ -3,7 +3,7 @@ $url = '{VGS_SAMPLE_ECHO_SERVER}/post';
 $data = json_encode(array('account_number' => '{ALIAS}'));
 $proxy = '{VAULT_URL}:{PORT}';
 $proxyauth = '{ACCESS_CREDENTIALS}';
-$certpath = '../../mixed-content/sandbox_cert.pem';
+$certpath = '{CERT_LOCATION}';
 
 $cURL = curl_init();
 $options = array( 
