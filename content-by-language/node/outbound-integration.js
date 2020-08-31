@@ -10,7 +10,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 const urlParams = url.parse('http://{ACCESS_CREDENTIALS}@{VAULT_HOST}:{PORT}');
 const agent = new HttpsProxyAgent({
   ...urlParams,
-  ca: [fs.readFileSync('../../mixed-content/sandbox_cert.pem')],
+  ca: [fs.readFileSync('{CERT_LOCATION}')],
 });
 async function getData() {
   let result;

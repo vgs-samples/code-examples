@@ -59,7 +59,7 @@ public class OutboundIntegration {
 
     final Certificate certificate = CertificateFactory.getInstance("X.509")
         .generateCertificate(OutboundIntegration.class
-            .getClassLoader().getResourceAsStream(("cert.pem")));
+            .getClassLoader().getResourceAsStream(("{CERT_LOCATION}")));
     keyStore.setCertificateEntry("vgs", certificate);
 
     return SSLContextBuilder.create().loadTrustMaterial(keyStore, null).build();
