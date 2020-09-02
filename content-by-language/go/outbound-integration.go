@@ -4,7 +4,7 @@ import (
   "bytes"
   "encoding/json"
   "io/ioutil"
-  "log"
+  "fmt"
   "net/http"
   "os"
   "crypto/tls"
@@ -25,14 +25,14 @@ func main() {
   }
   payloadBytes, err := json.Marshal(data)
   if err != nil {
-    log.Fatal(err)
+    fmt.Println(err)
   }
 
   body := bytes.NewReader(payloadBytes)
 
   caCert, err := ioutil.ReadFile("{CERT_LOCATION}")
   if err != nil {
-    log.Fatal(err)
+    fmt.Println(err)
   }
   caCertPool := x509.NewCertPool()
   caCertPool.AppendCertsFromPEM(caCert)
@@ -49,20 +49,20 @@ func main() {
 
   req, err := http.NewRequest("POST", "{VGS_SAMPLE_ECHO_SERVER}/post", body)
   if err != nil {
-    log.Fatal(err)
+    fmt.Println(err)
   }
   req.Header.Set("Content-Type", "application/json")
 
   resp, err := client.Do(req)
   if err != nil {
-    log.Fatal(err)
+    fmt.Println(err)
   }
 
   defer resp.Body.Close()
 
   respB, err := ioutil.ReadAll(resp.Body)
   if err != nil {
-    log.Fatal(err)
+    fmt.Println(err)
   }
-  log.Println(string(respB))
+  fmt.Println(string(respB))
 }

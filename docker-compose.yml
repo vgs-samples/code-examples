@@ -1,0 +1,76 @@
+version: '3'
+services:
+
+  try-it-bash:
+    build: 
+      context: .
+      args:
+        IMAGE: alpine
+        DEP_INSTALL_CMD: apk add --update curl bash jq
+    image: try-it-bash:latest
+    volumes:
+      - .:/opt/app
+    command: bash -c "cd content-by-language/bash && bash ./run.sh"
+
+  try-it-go:
+    build: 
+      context: .
+      args:
+        IMAGE: golang:latest
+        DEP_INSTALL_CMD: cd content-by-language/go && env GOARCH=amd64 go build inbound-integration.go && env GOARCH=amd64 go build outbound-integration.go
+    image: try-it-go:latest
+    volumes:
+      - .:/opt/app
+    command: bash -c "cd content-by-language/go && bash ./run.sh"
+
+  try-it-java:
+    build: 
+      context: .
+      args:
+        IMAGE: openjdk:11
+    image: try-it-java:latest
+    volumes:
+      - .:/opt/app
+    command: bash -c "cd content-by-language/java && bash ./run.sh"
+
+  try-it-node:
+    build: 
+      context: .
+      args:
+        IMAGE: node:latest
+        DEP_INSTALL_CMD: cd content-by-language/node && npm install
+    volumes:
+      - .:/opt/app
+    image: try-it-node:latest
+    command: bash -c "cd content-by-language/node && bash ./run.sh"
+
+  try-it-php:
+    build: 
+      context: .
+      args:
+        IMAGE: php:latest
+    volumes:
+      - .:/opt/app
+    image: try-it-php:latest
+    command: bash -c "cd content-by-language/php && bash ./run.sh"
+
+  try-it-python:
+    build: 
+      context: .
+      args:
+        IMAGE: python:latest
+        DEP_INSTALL_CMD: cd content-by-language/python && pip install -r requirements.txt
+    volumes:
+      - .:/opt/app
+    image: try-it-python:latest
+    command: bash -c "cd content-by-language/python && bash ./run.sh"
+
+  try-it-ruby:
+    build: 
+      context: .
+      args:
+        IMAGE: ruby:latest
+    volumes:
+      - .:/opt/app
+    image: try-it-ruby:latest
+    command: bash -c "cd content-by-language/ruby && bash ./run.sh"

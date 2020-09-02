@@ -14,14 +14,19 @@ $options = array(
   CURLOPT_POSTFIELDS => $data,
   CURLOPT_HTTPHEADER => array (
     'Accept: application/json',
-    'Content-Type:application/json'
+    'Content-Type: application/json'
   ),
-  CURLOPT_SSL_VERIFYPEER => false,
+  CURLOPT_SSL_VERIFYPEER => true,
+  CURLOPT_RETURNTRANSFER => true,
   CURLOPT_CAINFO => $certpath,
   CURLOPT_POST => true
 );
 
 curl_setopt_array($cURL, $options);
 $result = curl_exec($cURL);
+$errors = curl_error($cURL);
 curl_close($cURL);
+
+echo $result;
+echo $errors;
 ?>

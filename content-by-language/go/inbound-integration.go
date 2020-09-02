@@ -4,7 +4,7 @@ import (
   "bytes"
   "encoding/json"
   "io/ioutil"
-  "log"
+  "fmt"
   "net/http"
 )
 
@@ -18,27 +18,27 @@ func main() {
   }
   payloadBytes, err := json.Marshal(data)
   if err != nil {
-    log.Fatal(err)
+    fmt.Println(err)
   }
 
   body := bytes.NewReader(payloadBytes)
 
   req, err := http.NewRequest("POST", "{VAULT_URL}/post", body)
   if err != nil {
-    log.Fatal(err)
+    fmt.Println(err)
   }
   req.Header.Set("Content-Type", "application/json")
 
   resp, err := http.DefaultClient.Do(req)
   if err != nil {
-    log.Fatal(err)
+    fmt.Println(err)
   }
 
   defer resp.Body.Close()
 
   respB, err := ioutil.ReadAll(resp.Body)
   if err != nil {
-    log.Fatal(err)
+    fmt.Println(err)
   }
-  log.Println(string(respB))
+  fmt.Println(string(respB))
 }
