@@ -1,12 +1,12 @@
 <?php
 $url = '{VGS_SAMPLE_ECHO_SERVER}/post';
 $data = json_encode(array('account_number' => '{ALIAS}'));
-$proxy = '{VAULT_URL}:{PORT}';
+$proxy = '{VAULT_PROXY_URL}:{PORT}';
 $proxyauth = '{ACCESS_CREDENTIALS}';
 $certpath = '{CERT_LOCATION}';
 
 $cURL = curl_init();
-$options = array( 
+$options = array(
   CURLOPT_URL => $url,
   CURLOPT_PROXY => $proxy,
   CURLOPT_PROXYUSERPWD => $proxyauth,

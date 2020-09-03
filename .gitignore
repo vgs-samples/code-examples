@@ -1,1 +1,6 @@
 .idea
+**/personalized-inbound-integration.*
+**/personalized-outbound-integration.*
+**/node_modules
+**/results.txt
+content-by-language/node/package*.json
