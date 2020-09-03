@@ -16,5 +16,9 @@ $options = array(
 
 curl_setopt_array($cURL, $options);
 $result = curl_exec($cURL);
+$errors = curl_error($cURL);
 curl_close($cURL);
+
+echo $result;
+echo $errors;
 ?>

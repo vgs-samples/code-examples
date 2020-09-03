@@ -15,7 +15,7 @@ async function getData() {
     console.error(e);
   }
 
-  return await result.json();
+  return await result.text();
 }
 
 getData().then(response => console.log(response));

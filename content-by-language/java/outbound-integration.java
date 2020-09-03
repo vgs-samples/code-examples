@@ -24,7 +24,7 @@ import javax.net.ssl.SSLContext;
 
 public class OutboundIntegration {
   public static void main(String[] args) throws IOException, GeneralSecurityException {
-    final String proxyHost = "{VAULT_URL}";
+    final String proxyHost = "{VAULT_PROXY_URL}";
     final int proxyPort = {PORT};
     final String proxyUser = "{USERNAME}";
     final String proxyPassword = "{PASSWORD}";
