@@ -1,5 +1,5 @@
 curl https://backgroundcheck.yourcompany.com/post -k \\
-  -x $YOUR_PROXY \\
+  -x __VAULT_PROXY_URL__ \\
   -X POST \\
   -H "Content-type: application/json"  \\
   -d '{"ssn": "$VGS_TOKEN"}'
