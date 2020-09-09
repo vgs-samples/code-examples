@@ -1,67 +1,66 @@
+// Run with flag: -Djdk.http.auth.tunneling.disabledSchemes=""
+// More info: https://www.oracle.com/java/technologies/javase/8u111-relnotes.html
+
 package com.verygoodsecurity;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpHost;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.ssl.SSLContextBuilder;
-
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.net.InetSocketAddress;
+import java.net.ProxySelector;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
+import java.util.Base64;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 
 public class OutboundIntegration {
-  public static void main(String[] args) throws IOException, GeneralSecurityException {
-    final String proxyHost = "{VAULT_PROXY_URL}";
-    final int proxyPort = {PORT};
+  public static void main(String[] args) throws IOException, InterruptedException, GeneralSecurityException {
+    final String proxyHost = "{VAULT_HOST}";
+    final var proxyPort = {PORT};
     final String proxyUser = "{USERNAME}";
     final String proxyPassword = "{PASSWORD}";
-    final HttpHost proxy = new HttpHost(proxyHost, proxyPort);
 
-    final CredentialsProvider provider = new BasicCredentialsProvider();
-    provider.setCredentials(AuthScope.ANY,
-        new UsernamePasswordCredentials(proxyUser, proxyPassword));
-
-    final CloseableHttpClient client = HttpClientBuilder
-        .create()
-        .setProxy(proxy)
-        .setDefaultCredentialsProvider(provider)
-        .setSSLContext(buildSSLContext())
+    final HttpClient client = HttpClient.newBuilder()
+        .sslContext(buildSSLContext())
+        .proxy(ProxySelector.of(new InetSocketAddress(proxyHost, proxyPort)))
         .build();
+    final String proxyAuthentication = proxyUser + ":" + proxyPassword;
+    final String proxyAuthenticationEncoded = new String(Base64.getEncoder().encode(proxyAuthentication.getBytes()));
+    final HttpRequest request = HttpRequest.newBuilder()
+        .uri(URI.create("{VGS_SAMPLE_ECHO_SERVER}/post"))
+        .header("Content-Type", "application/json")
+        .POST(HttpRequest.BodyPublishers.ofString("{\"account_number\":\"{ALIAS}\"}"))
+        .setHeader("Proxy-Authorization", "Basic " + proxyAuthenticationEncoded)
+        .build();
+    final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-    final HttpPost httpPost = new HttpPost("{VGS_SAMPLE_ECHO_SERVER}/post");
-    httpPost.setHeader("Content-Type", "application/json");
-    httpPost.setEntity(new StringEntity("{\"account_number\":\"{ALIAS}\"}"));
-
-    final CloseableHttpResponse response = client.execute(httpPost);
-
-    final String content = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
-
-    System.out.println("response=" + content);
-    client.close();
+    System.out.println("response=" + response.body());
   }
 
   private static SSLContext buildSSLContext() throws IOException, GeneralSecurityException {
     final KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
     keyStore.load(null);
 
+    FileInputStream fileInputStream = new FileInputStream("{CERT_LOCATION}");
+
     final Certificate certificate = CertificateFactory.getInstance("X.509")
-        .generateCertificate(OutboundIntegration.class
-            .getClassLoader().getResourceAsStream(("{CERT_LOCATION}")));
+        .generateCertificate(fileInputStream);
     keyStore.setCertificateEntry("vgs", certificate);
 
-    return SSLContextBuilder.create().loadTrustMaterial(keyStore, null).build();
+    final TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+    tmf.init(keyStore);
+    final TrustManager[] trustManagers = tmf.getTrustManagers();
+
+    final SSLContext sslContext = SSLContext.getInstance("TLS");
+    sslContext.init(null, trustManagers, null);
+    return sslContext;
   }
 }
