@@ -1,26 +1,33 @@
 const fs = require('fs');
-const url = require('url');
-const fetch = require('node-fetch');
-const HttpsProxyAgent = require('https-proxy-agent');
-const urlParams = url.parse('http://{ACCESS_CREDENTIALS}@{VAULT_HOST}:{PORT}');
-const agent = new HttpsProxyAgent({
-  ...urlParams,
-  ca: [fs.readFileSync('{CERT_LOCATION}')],
-});
+const request = require('axios');
+const tunnel = require('tunnel');
+
 async function getData() {
-  let result;
-  try {
-    result = await fetch('{VGS_SAMPLE_ECHO_SERVER}/post', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        account_number: '{ALIAS}',
-      }),
-      agent,
-    });
-  } catch (e) {
-    console.error(e);
-  }
-  return await result.text();
+  const tunnelingAgent = tunnel.httpsOverHttp({
+    ca: [ fs.readFileSync('{CERT_LOCATION}')],
+    proxy: {
+        host: '{VAULT_HOST}',
+        port: '{PORT}',
+        proxyAuth: '{ACCESS_CREDENTIALS}'
+    }
+  });
+
+  const redactedPayload = {
+    account_number: '{ALIAS}',
+  };
+
+  return await request.post(
+    '{VGS_SAMPLE_ECHO_SERVER}/post',
+    JSON.stringify(redactedPayload),
+    {
+      httpsAgent: tunnelingAgent,
+      proxy: false,
+      headers: {
+        'Content-Type':'application/json'
+      }
+  }).then((r) => {
+    console.log('\\nResponse from Axios request on REVEAL:');
+    console.log(r.data);
+    return r.data;
+  });
 }
-getData().then(response => console.log(response));
