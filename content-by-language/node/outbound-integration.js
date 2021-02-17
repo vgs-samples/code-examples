@@ -31,5 +31,3 @@ async function getData() {
     return r.data;
   });
 }
-
-getData().then(response => console.log(response));
