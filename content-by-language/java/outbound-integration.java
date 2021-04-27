@@ -23,6 +23,7 @@ import javax.net.ssl.TrustManagerFactory;
 
 public class OutboundIntegration {
   public static void main(String[] args) throws IOException, InterruptedException, GeneralSecurityException {
+    System.setProperty("jdk.http.auth.tunneling.disabledSchemes", "");
     final String proxyHost = "{VAULT_HOST}";
     final var proxyPort = {PORT};
     final String proxyUser = "{USERNAME}";
@@ -42,6 +43,7 @@ public class OutboundIntegration {
         .build();
     final HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
+    System.out.println("status code=" + response.statusCode());
     System.out.println("response=" + response.body());
   }
 
