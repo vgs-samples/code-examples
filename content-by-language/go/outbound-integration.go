@@ -42,7 +42,7 @@ func main() {
       Proxy: http.ProxyFromEnvironment,
       TLSClientConfig: &tls.Config{
         RootCAs: caCertPool,
-        InsecureSkipVerify: true,
+        InsecureSkipVerify: false,
       },
     },
   }
