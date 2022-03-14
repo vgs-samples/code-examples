@@ -1,0 +1,34 @@
+{
+  "redact": {
+    "cardDetails": {
+      "templates": {
+        "bash": "curl https://api.sandbox.verygoodvault.com/aliases \\\n  -X POST \\\n  -u \"{{USERNAME}}:{{PASSWORD}}\" \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"data\": [\n      {\n        \"value\": \"{{CARD_NUMBER}}\",\n        \"classifiers\": [\n          \"card_number\"\n        ],\n        \"format\": \"UUID\"\n      },\n      {\n        \"value\": \"{{CARD_NAME}}\",\n        \"classifiers\": [\n          \"card_name\"\n        ],\n        \"format\": \"UUID\"\n      },\n      {\n        \"value\": \"{{EXP_DATE}}\",\n        \"classifiers\": [\n          \"expiration_date\"\n        ],\n        \"format\": \"UUID\"\n      },\n      {\n        \"value\": \"{{CVC}}\",\n        \"classifiers\": [\n          \"cvc\"\n        ],\n        \"format\": \"UUID\"\n      }\n    ]\n  }'",
+        "python": "configuration = vgs_api_v1.Configuration(\n  host=\"https://api.sandbox.verygoodvault.com\",\n  username='{{USERNAME}}',\n  password='{{PASSWORD}}'\n)"
+      },
+      "tokens": {
+        "cardNumber": "CARD_NUMBER",
+        "cardName": "CARD_NAME",
+        "exp": "EXP_DATE",
+        "cvc": "CVC"
+      },
+      "values": {
+        "USERNAME": "$USERNAME",
+        "PASSWORD": "$PASSWORD"
+      }
+    }
+  },
+  "reveal": {
+    "alias": {
+      "templates": {
+        "bash": "curl https://api.sandbox.verygoodvault.com/aliases?q={{ALIAS}} \\\n -u {{USERNAME}}:{{PASSWORD}} \\\n -H 'Content-Type: application/json'"
+      },
+      "tokens": {
+        "alias": "ALIAS"
+      },
+      "values": {
+        "USERNAME": "$USERNAME",
+        "PASSWORD": "$PASSWORD"
+      }
+    }
+  }
+}
