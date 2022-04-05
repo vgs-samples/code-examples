@@ -1,17 +1,20 @@
-require 'uri'
+# We recommend using the 'curb' library because the default
+# net/http library does not support connecting to a proxy using TLS.
+require 'curb'
 require 'json'
-require 'net/http'
-require 'net/https'
 
-proxy = URI.parse('http://{ACCESS_CREDENTIALS}@{VAULT_HOST}:{PORT}')
-uri = URI.parse('{VGS_SAMPLE_ECHO_SERVER}/post')
-http = Net::HTTP.new(uri.host, uri.port, proxy.host, proxy.port, proxy.user, proxy.password)
-http.use_ssl = true
-http.ca_file = '{CERT_LOCATION}'
-http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-http.verify_depth = 5
+proxy = 'https://{ACCESS_CREDENTIALS}@{VAULT_HOST}:{SECURE_PORT}'
+uri = '{VGS_SAMPLE_ECHO_SERVER}/post'
+
+c = Curl::Easy.new(uri) do |http|
+  http.headers["Content-Type"] = "application/json"
+  http.cacert = '{CERT_LOCATION}'
+  http.proxy_url = proxy
+  http.ssl_verify_peer = true
+  http.post_body = {account_number: '{ALIAS}'}.to_json
+  http.post
+end
 
 request = Net::HTTP::Post.new(uri.path, initheader = {'Content-Type' =>'application/json'})
-request.body = {account_number: '{ALIAS}'}.to_json
 response = http.request(request)
-puts "Response #{response.code} #{response.message}: #{response.body}"
+puts "Response #{c.status}: #{c.body}"
