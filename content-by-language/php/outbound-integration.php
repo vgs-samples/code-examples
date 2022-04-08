@@ -1,7 +1,7 @@
 <?php
 $url = '{VGS_SAMPLE_ECHO_SERVER}/post';
 $data = json_encode(array('account_number' => '{ALIAS}'));
-$proxy = '{VAULT_PROXY_URL}:{PORT}';
+$proxy = '{SECURE_PROTOCOL}://{VAULT_PROXY_URL}:{PORT}';
 $proxyauth = '{ACCESS_CREDENTIALS}';
 $certpath = '{CERT_LOCATION}';
 
