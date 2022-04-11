@@ -18,7 +18,7 @@ type Payload struct {
 
 func main() {
   // You can set the proxy as an HTTPS env variable proxyUrl and go will use by default:
-  os.Setenv("HTTPS_PROXY", "{ACCESS_CREDENTIALS}@{VAULT_HOST}:{PORT}")
+  os.Setenv("HTTPS_PROXY", "{SECURE_PROTOCOL}://{ACCESS_CREDENTIALS}@{VAULT_HOST}:{SECURE_PORT}")
 
   data := Payload{
     Account: "{ALIAS}",

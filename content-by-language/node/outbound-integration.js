@@ -7,7 +7,7 @@ async function getData() {
     ca: [ fs.readFileSync('{CERT_LOCATION}')],
     proxy: {
         host: '{VAULT_HOST}',
-        port: '{PORT}',
+        port: '{SECURE_PORT}',
         proxyAuth: '{ACCESS_CREDENTIALS}'
     }
   });
