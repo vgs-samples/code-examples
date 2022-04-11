@@ -15,6 +15,4 @@ c = Curl::Easy.new(uri) do |http|
   http.post
 end
 
-request = Net::HTTP::Post.new(uri.path, initheader = {'Content-Type' =>'application/json'})
-response = http.request(request)
 puts "Response #{c.status}: #{c.body}"
