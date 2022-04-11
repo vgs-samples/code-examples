@@ -25,7 +25,7 @@ public class OutboundIntegration {
   public static void main(String[] args) throws IOException, InterruptedException, GeneralSecurityException {
     System.setProperty("jdk.http.auth.tunneling.disabledSchemes", "");
     final String proxyHost = "{VAULT_HOST}";
-    final var proxyPort = {PORT};
+    final var proxyPort = {SECURE_PORT};
     final String proxyUser = "{USERNAME}";
     final String proxyPassword = "{PASSWORD}";
 
