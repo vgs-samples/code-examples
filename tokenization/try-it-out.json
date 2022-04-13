@@ -2,7 +2,7 @@
   "redact": {
     "cardDetails": {
       "templates": {
-        "bash": "curl https://api.sandbox.verygoodvault.com/aliases \\\n  -X POST \\\n  -u {{USERNAME}}:{{PASSWORD}} \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"data\": [\n      {\n        \"value\": \"{{CARD_NUMBER}}\",\n        \"classifiers\": [\n          \"card_number\"\n        ],\n        \"format\": \"UUID\"\n      },\n      {\n        \"value\": \"{{CARD_NAME}}\",\n        \"classifiers\": [\n          \"card_name\"\n        ],\n        \"format\": \"UUID\"\n      },\n      {\n        \"value\": \"{{EXP_DATE}}\",\n        \"classifiers\": [\n          \"expiration_date\"\n        ],\n        \"format\": \"UUID\"\n      },\n      {\n        \"value\": \"{{CVC}}\",\n        \"classifiers\": [\n          \"cvc\"\n        ],\n        \"format\": \"UUID\"\n      }\n    ]\n  }'",
+        "bash": "curl https://api.sandbox.verygoodvault.com/aliases \\\n  -X POST \\\n  -u {{USERNAME}}:{{PASSWORD}} \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"data\": [\n      {\n        \"value\": \"{{CARD_NUMBER}}\",\n        \"classifiers\": [\n          \"card_number\"\n        ],\n        \"format\": \"UUID\"\n      },\n      {\n        \"value\": \"{{CARD_NAME}}\",\n        \"classifiers\": [\n          \"card_name\"\n        ],\n        \"format\": \"UUID\"\n      },\n      {\n        \"value\": \"{{EXP_DATE}}\",\n        \"classifiers\": [\n          \"expiration_date\"\n        ],\n        \"format\": \"UUID\"\n      },\n      {\n        \"value\": \"{{CVC}}\",\n        \"classifiers\": [\n          \"cvc\"\n        ],\n        \"format\": \"UUID\"\n      }\n    ]\n  }'"
       },
       "tokens": {
         "cardNumber": "CARD_NUMBER",
