@@ -10,6 +10,7 @@ c = Curl::Easy.new(uri) do |http|
   http.headers["Content-Type"] = "application/json"
   http.cacert = '{CERT_LOCATION}'
   http.proxy_url = proxy
+  http.follow_location = true
   http.ssl_verify_peer = true
   http.post_body = {account_number: '{ALIAS}'}.to_json
   http.post
