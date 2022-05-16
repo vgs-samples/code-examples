@@ -1,33 +1,36 @@
-const fs = require('fs');
-const request = require('axios');
-const tunnel = require('tunnel');
+const fs = require('fs')
+const tls = require('tls')
+const { curly } = require('node-libcurl')
 
-async function getData() {
-  const tunnelingAgent = tunnel.httpsOverHttp({
-    ca: [ fs.readFileSync('{CERT_LOCATION}')],
-    proxy: {
-        host: '{VAULT_HOST}',
-        port: '{SECURE_PORT}',
-        proxyAuth: '{ACCESS_CREDENTIALS}'
-    }
-  });
+const certFilePath = '{CERT_LOCATION}'
+const ca = '/tmp/vgs-outbound-proxy-ca.pem'
+const tlsData = tls.rootCertificates.join('\n')
+const vgsSelfSigned = fs.readFileSync(certFilePath).toString('utf-8')
+const systemCaAndVgsCa = tlsData+ '\n' + vgsSelfSigned
+fs.writeFileSync(ca, systemCaAndVgsCa)
 
-  const redactedPayload = {
-    account_number: '{ALIAS}',
-  };
-
-  return await request.post(
-    '{VGS_SAMPLE_ECHO_SERVER}/post',
-    JSON.stringify(redactedPayload),
-    {
-      httpsAgent: tunnelingAgent,
-      proxy: false,
-      headers: {
-        'Content-Type':'application/json'
-      }
-  }).then((r) => {
-    console.log('\\nResponse from Axios request on REVEAL:');
-    console.log(r.data);
-    return r.data;
-  });
+async function run() {
+    return curly.post('{VGS_SAMPLE_ECHO_SERVER}/post', {
+        postFields: JSON.stringify({ account_number: '{ALIAS}' }),
+        httpHeader: ['Content-type: application/json'],
+        caInfo: ca,
+        proxy: 'https://{ACCESS_CREDENTIALS}@{VAULT_HOST}:{SECURE_PORT}',
+        verbose: true,
+    })
 }
+
+run()
+    .then(({ data, statusCode, headers }) =>
+        console.log(
+            require('util').inspect(
+                {
+                    data: JSON.parse(data.data),
+                    statusCode,
+                    headers,
+                },
+                null,
+                4,
+            ),
+        ),
+    )
+    .catch((error) => console.error(`Something went wrong`, { error }))
