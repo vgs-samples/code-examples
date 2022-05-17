@@ -45,7 +45,7 @@ public class OutboundIntegration {
         new AuthScope("{VAULT_HOST}", proxyPort),
         new UsernamePasswordCredentials("{USERNAME}", "{PASSWORD}"));
     HttpHost proxy = new HttpHost("{VAULT_HOST}", proxyPort, "https");
-    HttpHost target = new HttpHost("{VGS_SAMPLE_ECHO_SERVER}", 443, "https");
+    HttpHost target = new HttpHost(new URL("{VGS_SAMPLE_ECHO_SERVER}").getHost(), 443, "https");
 
     CloseableHttpClient httpclient = HttpClients.custom()
         .setSSLSocketFactory(getSslConnectionSocketFactory())
