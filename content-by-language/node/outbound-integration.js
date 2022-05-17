@@ -4,9 +4,9 @@ const { curly } = require('node-libcurl')
 
 const certFilePath = '{CERT_LOCATION}'
 const ca = '/tmp/vgs-outbound-proxy-ca.pem'
-const tlsData = tls.rootCertificates.join('\n')
+const tlsData = tls.rootCertificates.join('\\n')
 const vgsSelfSigned = fs.readFileSync(certFilePath).toString('utf-8')
-const systemCaAndVgsCa = tlsData+ '\n' + vgsSelfSigned
+const systemCaAndVgsCa = tlsData+ '\\n' + vgsSelfSigned;
 fs.writeFileSync(ca, systemCaAndVgsCa)
 
 async function run() {
