@@ -1,0 +1,91 @@
+data:
+  - attributes:
+      created_at: '2021-11-30T09:46:20'
+      destination_override_endpoint: '*'
+      entries:
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: filePath
+                  operator: ends_with
+                  type: string
+                  values:
+                    - encrypted
+          id: e0f79720-90ec-4f7c-8490-afbb4ee271b4
+          id_selector: null
+          operation: REDACT
+          operations:
+            - - name: github.com/verygoodsecurity/common/vars/Set
+                parameters:
+                  value: tok_sandbox_kjTBbQtYadkgjeDBQ9YDpD
+                  var: ctx.privateKey
+            - - name: github.com/verygoodsecurity/common/vars/Reveal
+                parameters:
+                  var: ctx.privateKey
+            - - name: github.com/verygoodsecurity/common/vars/Set
+                parameters:
+                  value: tok_sandbox_s84qntSGbwCkJkLRvsvUMN
+                  var: ctx.privateKeyPassword
+            - - name: github.com/verygoodsecurity/common/vars/Reveal
+                parameters:
+                  var: ctx.privateKeyPassword
+            - - name: github.com/verygoodsecurity/common/utils/crypto/pgp/DecryptFile
+                parameters:
+                  privateKey: ctx.privateKey
+                  privateKeyPassword: ctx.privateKeyPassword
+          phase: RESPONSE
+          public_token_generator: UUID
+          targets: []
+          token_manager: PERSISTENT
+          transformer: REGEX
+          transformer_config: []
+          transformer_config_map:
+            patterns: []
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: filePath
+                  operator: ends_with
+                  type: string
+                  values:
+                    - decrypted
+          id: 219519b4-7461-4803-8d8a-1a9ca16726f4
+          id_selector: null
+          operation: REDACT
+          operations:
+            - - name: github.com/verygoodsecurity/common/vars/Set
+                parameters:
+                  value: 'tok_sandbox_iGmX6JWUb9NzNrDA8vEQRa'
+                  var: ctx.publicKey
+            - - name: github.com/verygoodsecurity/common/vars/Reveal
+                parameters:
+                  var: ctx.publicKey
+            - - name: github.com/verygoodsecurity/common/utils/crypto/pgp/EncryptFile
+                parameters:
+                  publicKey: ctx.publicKey
+                  armor: 'false'
+          phase: RESPONSE
+          public_token_generator: UUID
+          targets: []
+          token_manager: PERSISTENT
+          transformer: REGEX
+          transformer_config: []
+          transformer_config_map:
+            patterns: []
+          type: null
+      host_endpoint: '*'
+      id: aaeeed79-19cd-4947-8040-211825aee70e
+      ordinal: null
+      port: 22
+      protocol: sftp
+      source_endpoint: '*'
+      tags:
+        name: 'on GET: if path ends_with encrypted --> decrypt; if path ends_with decrypted --> encrypt'
+      updated_at: '2022-07-19T20:45:10'
+    id: aaeeed79-19cd-4947-8040-211825aee70e
+    type: rule_chain
+version: 1
