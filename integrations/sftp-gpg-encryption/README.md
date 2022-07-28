@@ -71,7 +71,7 @@ Private key alias and passphrase for decryption:
 #### 9. This is it! You are ready to test!
 
 
-## Testing part
+## Testing
 
 SFTP route settings:
 - If file-path ends with `decrypted`, it does ecryption on GET
