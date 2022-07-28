@@ -59,7 +59,10 @@ Private key alias and passphrase for decryption:
 
 <img width="744" alt="image" src="https://user-images.githubusercontent.com/78090218/180273598-7e7e11e1-231d-44c1-87d7-c29d3897e3ef.png">
 
-#### 7. Save sftp_route.yml and import it
+#### 7. Load the new route into your vault
+
+- Save sftp_route.yml with the new public and private keys loaded in
+- Import the sftP-route.yml file into your vault via the VGS Dashboard, or the [VGS CLI](https://www.verygoodsecurity.com/docs/vgs-cli/commands#apply-1)
 
 #### 8. Setup the upstream for SFTP route:
 
