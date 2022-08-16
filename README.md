@@ -1,5 +1,7 @@
 # Code Examples
 
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/vgs-samples/code-examples/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/vgs-samples/code-examples/tree/master)
+
 This repo contains code snippets that can be shared across documentation
 and to be run by our lovely customers.
 
