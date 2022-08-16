@@ -1,0 +1,21 @@
+version: 2.1
+
+jobs:
+  test:
+    steps:
+      - checkout
+      - run: ./run_tests.sh
+
+workflows:
+    test-examples:
+      jobs:
+        - test:
+            filters:
+              branches:
+                ignore:
+                  - /master/
+                  - /develop/
+                  - /dev/
+                  - /release\/.*/
+              tags:
+                ignore: /.*/
