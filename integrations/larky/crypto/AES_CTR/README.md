@@ -7,8 +7,6 @@ This sample includes:
 
 ## Testing part:
 
-
-
 #### 1. Python:
 
 Python script includes all hard-coded inside. As a result, it prints the encrypted message:
@@ -24,7 +22,7 @@ https://www.verygoodsecurity.com/docs/larky/test-larky-locally
 
 Example of run:
 
-<img width="1367" alt="image" src="https://user-images.githubusercontent.com/78090218/189143875-26ce863c-d636-4143-9698-8fc086811b6e.png">
+<img width="1367" alt="image" src="https://user-images.githubusercontent.com/78090218/189316028-377edbbd-14c2-42be-ad83-5be87a11607d.png">
 
 #### 3. YAML file:
 
