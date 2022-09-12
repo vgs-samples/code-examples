@@ -16,8 +16,8 @@ load("@vendor//Crypto/Hash/SHA256", SHA256="SHA256")
 
 
 def process(input, ctx):
-    API_SECRET = '...'
-    secondKey = '...'
+    API_SECRET = '5243A220F218587596BC3A9E3C47A4E7B4FF98F7136856F174940D22071A35DD'
+    secondKey = 'MDIzM1OCNkMzRDTJGNDIc0MM1MkEz0NTA0E3Rjk5NDc='
 
     body_str = str(input.body)
     body = json.loads(body_str)
@@ -31,7 +31,7 @@ def process(input, ctx):
 
     """Aes CTR encryption part"""
     to_encrypt = query + '&alg=SHA256&hashed_query='+hashValue.hexdigest()
-    ivv = '...' # made it static to compare with Python
+    ivv = 'seBheNNYzEURuyQR' # made it static to compare with Python
     secondKey = base64.b64decode(secondKey)
     h = binascii.hexlify(bytes(ivv,encoding='utf-8'))
     ctr = Counter.new(128, initial_value=int(str(h), 16))
