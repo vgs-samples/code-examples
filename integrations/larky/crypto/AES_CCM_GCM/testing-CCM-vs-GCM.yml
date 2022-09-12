@@ -28,52 +28,44 @@ data:
             - name: github.com/verygoodsecurity/common/compute/larky/http/Process
               parameters:
                 script: |-
+                  load("@stdlib//base64", base64="base64")
                   load("@stdlib//builtins", builtins="builtins")
                   load("@stdlib//json", json="json")
-                  load("@vgs//vault", "vault")
-                  load("@stdlib//hashlib", "hashlib")
-                  load("@stdlib//binascii", "binascii")
-                  load("@vgs//vault", "vault")
-                  load("@stdlib//base64", base64="base64")
-                  load("@vendor//Crypto/Hash/HMAC", HMAC="HMAC")
-                  load("@stdlib//string", string="string")
-                  load("@stdlib//random", random="random") # instead of 'secrets'
+                  load("@stdlib//larky", larky="larky")
                   load("@vendor//Crypto/Cipher/AES", AES="AES")
-                  load("@vendor//Crypto/Util/Counter", Counter="Counter") # correct?
-                  load("@vendor//Crypto/Hash/SHA256", SHA256="SHA256")
+                  load("@vgs//vault", "vault")
 
                   def process(input, ctx):
-                    API_SECRET = '...'
-                    secondKey = '...'
+                    TAG_LENGTH = 8
+                    session_key = b'vbfhg768ghvbfhg768ghvbfhg768gh12'
+                    nonce = b'asd456fgh012'
 
                     body_str = str(input.body)
                     body = json.loads(body_str)
-                    query = body['query']
 
-                    # hashpart
-                    secret = bytes(API_SECRET, encoding='utf-8')
-                    query_tohash = query + API_SECRET
-                    hashValue = HMAC.new(secret, bytes(query_tohash, encoding='utf-8'), digestmod=SHA256)
-                    print (hashValue.hexdigest())
+                    # GCM:
+                    cipher_aes = AES.new(session_key, AES.MODE_GCM, nonce=nonce, mac_len=TAG_LENGTH)
+                    ciphertext, tag = cipher_aes.encrypt_and_digest(builtins.bytes(body_str, 'utf-8'))
+                    ciphertext_tag = b"".join([cipher_aes.nonce, ciphertext, tag])
+                    ciphertext_b64_GCM = base64.b64encode(ciphertext_tag).decode('utf-8')
+                    # decrypt:
+                    cipher = AES.new(session_key, AES.MODE_GCM, nonce=nonce)
+                    plaintext = cipher.decrypt(ciphertext)
+                    body['GCM'] = ciphertext_b64_GCM
+                    body['GCM_decrypted'] = json.loads(str(plaintext))
 
-                    # Aes CTR encryption part
-                    to_encrypt = query + '&alg=SHA256&hashed_query='+hashValue.hexdigest()
-                    ivv = '...' # made it static to compare with Python
-                    secondKey = base64.b64decode(secondKey)
-                    h = binascii.hexlify(bytes(ivv,encoding='utf-8'))
-                    ctr = Counter.new(128, initial_value=int(str(h), 16))
-                    chiper = AES.new(secondKey, AES.MODE_CTR, counter=ctr)
-                    chipertext = chiper.encrypt(bytes(to_encrypt,encoding='utf-8'))
-                    encString = base64.urlsafe_b64encode(chipertext).decode()
-                    payload =  '&encryptedData=' + encString + '&iv=' + ivv
+                    # CCM:
+                    cipher_aes = AES.new(session_key, AES.MODE_CCM, nonce=nonce, mac_len=TAG_LENGTH)
+                    ciphertext, tag = cipher_aes.encrypt_and_digest(builtins.bytes(body_str, 'utf-8'))
+                    ciphertext_tag = b"".join([cipher_aes.nonce, ciphertext, tag])
+                    ciphertext_b64_CCM = base64.b64encode(ciphertext_tag).decode('utf-8')
+                    # decrypt:
+                    cipher = AES.new(session_key, AES.MODE_CCM, nonce=nonce)
+                    plaintext = cipher.decrypt(ciphertext)
+                    body['CCM'] = ciphertext_b64_CCM
+                    body['CCM_decrypted'] = json.loads(str(plaintext))
 
-                    # final result to be sent to upstream
-                    enc = bytes(payload, encoding='utf-8')
-                    final = base64.b64encode(enc).decode()
-
-                    body['larky_'] = final
-                    body.pop('query')
-
+                    body.pop('card_number')
                     input.body = builtins.bytes(json.dumps(body))
                     return input
           phase: REQUEST
