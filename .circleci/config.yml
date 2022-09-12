@@ -1,1 +1,16 @@
+version: 2.0
 
+jobs:
+  test-larky:
+    docker:
+      - image: cimg/openjdk:17.0.1
+    steps:
+      - checkout
+      - run: make test-larky
+
+workflows:
+  version: 2
+
+  test-larky:
+    jobs:
+      - test-larky

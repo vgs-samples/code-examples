@@ -4,3 +4,4 @@
 **/node_modules
 **/results.txt
 content-by-language/node/package*.json
+tmp/*
