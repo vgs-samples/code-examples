@@ -1,12 +1,46 @@
 version: 2.0
 
+setup-maven-distributions: &setup-maven-distributions
+  run:
+    name: Setup distrubution servers for larky
+    command: |
+      mkdir -p ~/.m2
+      cat <<EOF > ~/.m2/settings.xml
+      <settings>
+        <servers>
+          <server>
+            <id>github</id>
+            <username>$GITHUB_USERNAME</username>
+            <password>$GITHUB_API_TOKEN</password>
+          </server>
+        </servers>
+      </settings>
+      EOF
+      echo $GITHUB_USERNAME
 jobs:
   test-larky:
     docker:
-      - image: cimg/openjdk:17.0.1
+      - image: maven:3.8.6-openjdk-11
     steps:
       - checkout
-      - run: make test-larky
+      - <<: *setup-maven-distributions
+      - run:
+          name: Clone starlarky
+          command: | 
+            git clone git@github.com:verygoodsecurity/starlarky.git ./tmp/starlarky
+      - run:
+          name: Remove default quick_tests
+          command: |
+            rm -f ./tmp/starlarky/larky/src/test/resources/quick_tests/**.star
+      - run:
+          name: Copy code example tests to quick_tests folder
+          command: |
+            cp $(find ./integrations/larky/ | grep .star) ./tmp/starlarky/larky/src/test/resources/quick_tests/
+      - run:
+          name: Test Larky
+          command: |
+            cd ./tmp/starlarky
+            mvn -Dtest='LarkyQuickTests*' test -pl larky
 
 workflows:
   version: 2
