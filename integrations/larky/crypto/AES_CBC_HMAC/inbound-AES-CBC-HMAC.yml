@@ -1,0 +1,99 @@
+data:
+  - attributes:
+      created_at: '2021-04-26T09:55:37'
+      destination_override_endpoint: 'https://echo.apps.verygood.systems'
+      entries:
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - condition: null
+                expression:
+                  field: PathInfo
+                  operator: matches
+                  type: string
+                  values:
+                    - /post
+              - condition: null
+                expression:
+                  field: ContentType
+                  operator: equals
+                  type: string
+                  values:
+                    - application/json
+          id: 3e4ca047-23e2-4397-9a67-d673cedf4cc8
+          id_selector: null
+          operation: REDACT
+          operations:
+            - name: github.com/verygoodsecurity/common/compute/larky/http/Process
+              parameters:
+                script: |-
+                  load("@stdlib//builtins", builtins="builtins")
+                  load("@stdlib//json", json="json")
+                  load("@vgs//vault", "vault")
+                  load("@stdlib//hashlib", "hashlib")
+                  load("@stdlib//binascii", "binascii")
+                  load("@stdlib//base64", base64="base64")
+                  load("@vendor//Crypto/Hash/HMAC", HMAC="HMAC")
+                  load("@vendor//Crypto/Cipher/AES", AES="AES")
+                  load("@vendor//Crypto/Hash/SHA256", SHA256="SHA256")
+                  load("@vendor//Crypto/Random", get_random_bytes="get_random_bytes")
+                  load("@vendor//Crypto/Hash/MD5", MD5="MD5")
+                  load("@vendor//Crypto/Util/Padding", pad="pad")
+
+                  def bytes_to_string(by):
+                      return by.decode("utf-8")
+
+                  def string_to_bytes(s):
+                      return builtins.bytes(s, encoding="utf-8")
+
+                  def process(input, ctx):
+                      body_str = str(input.body)
+                      body = json.loads(body_str)
+                      ssn = body['ssn']
+                      # encrypt SSN
+                      #KEY = get_random_bytes(16)
+                      #IV = get_random_bytes(16)
+                      KEY = b'abcdefgh12345678' # static for test purposes
+                      IV = b'09876543stuvwxyz'
+                      pad_ssn = pad(bytes(ssn, encoding='utf-8'), 16)
+                      cipher = AES.new(KEY, AES.MODE_CBC, IV)
+                      encrypted_ssn = cipher.encrypt(pad_ssn)
+                      
+                      # convert encrypted SSN to bytes, encode as base64, convert back to string
+                      body['ssn'] = bytes_to_string(base64.b64encode(string_to_bytes(encrypted_ssn)))
+                      body_as_bytes = string_to_bytes(str(body))
+
+                      # create md5 of body
+                      md5_hash = MD5.new(body_as_bytes).digest()
+                      md5_string = bytes_to_string(binascii.hexlify(md5_hash))
+
+                      # create hmac of body
+                      hash_value = HMAC.new(KEY, body_as_bytes, digestmod=SHA256).digest()
+                      hmac_header = bytes_to_string(binascii.hexlify(hash_value))
+                      body['x-hmac'] = hmac_header
+
+                      input.body = builtins.bytes(json.dumps(body))
+                      return input
+          phase: REQUEST
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - $.email
+          transformer_config_map: null
+      host_endpoint: (.*)\.verygoodproxy\.com
+      id: c891d346-0e1b-49b8-99ac-0754d34f14f2
+      ordinal: null
+      port: 80
+      protocol: http
+      source_endpoint: '*'
+      tags:
+        name: echo.apps.verygood.systems-steel-blue-parallelogram
+        source: RouteContainer
+      updated_at: '2021-05-07T11:45:32'
+    id: c891d346-0e1b-49b8-99ac-0754d34f14f2
+    type: rule_chain
+version: 1
