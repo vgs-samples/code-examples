@@ -19,7 +19,7 @@ Example of run:
 
 Upload the YAML to your vault and run:
 ```
-curl https://tntbmt67sc7.sandbox.verygoodproxy.com/post -k \
+curl https://<VAULT_ID>.sandbox.verygoodproxy.com/post -k \
   -H "Content-type: application/json" \
   -d '{"ssn":"0987654321"}'
 ```
