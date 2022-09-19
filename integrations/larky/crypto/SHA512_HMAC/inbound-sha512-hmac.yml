@@ -1,0 +1,94 @@
+data:
+  - attributes:
+      created_at: '2021-04-26T09:55:37'
+      destination_override_endpoint: 'https://echo.apps.verygood.systems'
+      entries:
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - condition: null
+                expression:
+                  field: PathInfo
+                  operator: matches
+                  type: string
+                  values:
+                    - /post
+              - condition: null
+                expression:
+                  field: ContentType
+                  operator: equals
+                  type: string
+                  values:
+                    - application/json
+          id: 3e4ca047-23e2-4397-9a67-d673cedf4cc8
+          id_selector: null
+          operation: REDACT
+          operations:
+            - name: github.com/verygoodsecurity/common/compute/larky/http/Process
+              parameters:
+                script: |-
+                  load("@stdlib//builtins", builtins="builtins")
+                  load("@stdlib//json", json="json")
+                  load("@vgs//vault", "vault")
+                  load("@stdlib//hashlib", "hashlib")
+                  load("@stdlib//binascii", "binascii")
+                  load("@stdlib//base64", base64="base64")
+                  load("@vendor//Crypto/Hash/HMAC", HMAC="HMAC")
+                  load("@vendor//Crypto/Hash/SHA512", SHA512="SHA512")
+                  load("@stdlib//builtins", builtins="builtins")
+                  load("@stdlib//json", json="json")
+                  load("@stdlib//codecs", codecs="codecs")
+
+                  def process(input, ctx):
+                      headers = input.headers
+                      method = 'POST'
+                      uri = '/post'
+                      content_type = headers['content-type']
+                      date = headers['date']
+                      secret = headers['shared-secret']
+                      body_utf8 = bytes(input.body, encoding="utf-8")
+                      signature = SHA512.new(body_utf8).hexdigest()
+                      hmac_input = "\n".join(
+                          [
+                              method,
+                              signature,
+                              content_type,
+                              date,
+                              uri
+                          ]
+                      )
+                      hmac_input = bytes(hmac_input, encoding="utf-8")
+                      secret = bytes(secret, encoding="utf-8")
+                      hash_value = HMAC.new(secret, hmac_input, digestmod=SHA512).digest()
+                      result = base64.b64encode(hash_value)
+                      body = {
+                        "signature": str(signature),
+                        "result": str(result)
+                      }
+                      headers.pop("shared-secret")
+                      input.headers = headers
+                      input.body = builtins.bytes(json.dumps(body))
+                      return input
+          phase: REQUEST
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - $.email
+          transformer_config_map: null
+      host_endpoint: (.*)\.verygoodproxy\.com
+      id: c891d346-0e1b-49b8-99ac-0754d34f14f2
+      ordinal: null
+      port: 80
+      protocol: http
+      source_endpoint: '*'
+      tags:
+        name: echo.apps.verygood.systems-steel-blue-parallelogram
+        source: RouteContainer
+      updated_at: '2021-05-07T11:45:32'
+    id: c891d346-0e1b-49b8-99ac-0754d34f14f2
+    type: rule_chain
+version: 1
