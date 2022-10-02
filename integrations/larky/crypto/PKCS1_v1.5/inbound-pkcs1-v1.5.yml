@@ -59,7 +59,7 @@ data:
                       card_number = vault.reveal(body['card_number'])
                       exp_date = body['exp_date']
                       
-                      # ecryption part:
+                      # encryption part:
                       encryption_key = vault.reveal(public_key)
                       key = RSA.importKey(base64.b64decode(encryption_key))
                       encrypted_card = base64.b64encode(encrypt(key, bytearray(card_number, 'utf-8'))).decode('utf-8')
