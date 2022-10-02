@@ -1,0 +1,97 @@
+data:
+  - attributes:
+      created_at: '2021-04-26T09:55:37'
+      destination_override_endpoint: 'https://echo.apps.verygood.systems'
+      entries:
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - condition: null
+                expression:
+                  field: PathInfo
+                  operator: matches
+                  type: string
+                  values:
+                    - /post
+              - condition: null
+                expression:
+                  field: ContentType
+                  operator: equals
+                  type: string
+                  values:
+                    - application/json
+          id: 3e4ca047-23e2-4397-9a67-d673cedf4cc8
+          id_selector: null
+          operation: REDACT
+          operations:
+            - name: github.com/verygoodsecurity/common/compute/larky/http/Process
+              parameters:
+                script: |-
+                  load("@stdlib//hashlib", "hashlib")
+                  load("@stdlib//binascii", "binascii")
+                  load("@vgs//vault", "vault")
+                  load("@vgs//http/request", "VGSHttpRequest")
+                  load("@stdlib//builtins", builtins="builtins")
+                  load("@stdlib//base64", base64="base64")
+                  load("@stdlib//json", json="json")
+                  load("@stdlib//larky", larky="larky")
+                  load("@stdlib//operator", operator="operator")
+                  load("@vendor//Crypto/Cipher/PKCS1_v1_5",PKCS1_v1_5="PKCS1_v1_5_Cipher")
+                  load("@vendor//Crypto/PublicKey/RSA", RSA="RSA")
+
+                  def encrypt(key, text):
+                      cipher = PKCS1_v1_5.new(key)
+                      ciphertext = cipher.encrypt(text)
+                      return ciphertext
+
+                  def decrypt(key, ciphertext):
+                      cipher = PKCS1_v1_5.new(key)
+                      sentinel = 'Error'
+                      text = cipher.decrypt(ciphertext, sentinel)
+                      return text
+
+                  def process(input, ctx):    
+                      private_key = 'tok_sandbox_wptPRsWr2N5hyXGvkZ8247'
+                      public_key = 'tok_sandbox_8uLH3XdekgzSYa2mpiRwwi'
+
+                      body = json.loads(str(input.body))
+                      card_number = vault.reveal(body['card_number'])
+                      exp_date = body['exp_date']
+                      
+                      # ecryption part:
+                      encryption_key = vault.reveal(public_key)
+                      key = RSA.importKey(base64.b64decode(encryption_key))
+                      encrypted_card = base64.b64encode(encrypt(key, bytearray(card_number, 'utf-8'))).decode('utf-8')
+                      encrypted_date = base64.b64encode(encrypt(key, bytearray(exp_date, 'utf-8'))).decode('utf-8')
+
+                      # decryption part:
+                      decryption_key = vault.reveal(private_key)
+                      key = RSA.importKey(base64.b64decode(decryption_key))
+                      body['decrypted_card'] = str(decrypt(key, base64.b64decode(bytes(encrypted_card, 'utf-8'))))
+                      body['decrypted_date'] = str(decrypt(key, base64.b64decode(bytes(encrypted_date, 'utf-8'))))
+
+                      input.body = builtins.bytes(json.dumps(body))
+                      return input
+          phase: REQUEST
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - $.email
+          transformer_config_map: null
+      host_endpoint: (.*)\.verygoodproxy\.com
+      id: c891d346-0e1b-49b8-99ac-0754d34f14f2
+      ordinal: null
+      port: 80
+      protocol: http
+      source_endpoint: '*'
+      tags:
+        name: echo.apps.verygood.systems-steel-blue-parallelogram
+        source: RouteContainer
+      updated_at: '2021-05-07T11:45:32'
+    id: c891d346-0e1b-49b8-99ac-0754d34f14f2
+    type: rule_chain
+version: 1
