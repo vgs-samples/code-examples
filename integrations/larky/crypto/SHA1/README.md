@@ -13,7 +13,7 @@ https://www.verygoodsecurity.com/docs/larky/test-larky-locally
 
 Example of run:
 
-<IMAGE>
+<img width="1359" alt="image" src="https://user-images.githubusercontent.com/78090218/195982008-f66b312d-fd2a-43ce-9dbb-528a21e56fcb.png">
 
 #### 2. YAML file:
 
