@@ -5,10 +5,7 @@ load("@stdlib//binascii", "binascii")
 load("@vgs//vault", "vault")
 load("@vgs//http/request", "VGSHttpRequest")
 load("@stdlib//builtins", builtins="builtins")
-load("@stdlib//base64", base64="base64")
 load("@stdlib//json", json="json")
-load("@stdlib//larky", larky="larky")
-load("@stdlib//operator", operator="operator")
 load("@vendor//Crypto/Hash/SHA1", SHA1="SHA1")
 
 
