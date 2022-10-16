@@ -8,7 +8,6 @@ load("@stdlib//builtins", builtins="builtins")
 load("@stdlib//base64", base64="base64")
 load("@stdlib//json", json="json")
 load("@stdlib//larky", larky="larky")
-load("@stdlib//operator", operator="operator")
 load("@vendor//Crypto/Hash", MD5="MD5")
 
 
