@@ -1,7 +1,6 @@
 load("@stdlib//unittest", "unittest")
 load("@vendor//asserts", "asserts")
 load("@vgs//http/request", "VGSHttpRequest")
-load("@vgs//vault", "vault")
 load("@stdlib//builtins", builtins="builtins")
 load("@stdlib//json", json="json")
 load("@vendor//Crypto/Hash/SHA1", SHA1="SHA1")
