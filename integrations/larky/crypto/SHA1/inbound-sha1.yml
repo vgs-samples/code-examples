@@ -27,10 +27,7 @@ data:
           operations:
             - name: github.com/verygoodsecurity/common/compute/larky/http/Process
               parameters:
-                script: |-
-                  load("@stdlib//hashlib", "hashlib")
-                  load("@stdlib//binascii", "binascii")
-                  load("@vgs//vault", "vault")
+                script: 
                   load("@stdlib//builtins", builtins="builtins")
                   load("@stdlib//json", json="json")
                   load("@vendor//Crypto/Hash/SHA1", SHA1="SHA1")
