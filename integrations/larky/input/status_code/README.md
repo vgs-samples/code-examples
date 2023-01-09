@@ -1,4 +1,4 @@
-# Change Expiration Date format
+# Reading the response status code
 
 Use-case: when it's required to perform different actions depending on the status code.
 
