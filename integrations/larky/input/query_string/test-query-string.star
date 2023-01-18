@@ -4,38 +4,32 @@ load("@stdlib//hashlib", "hashlib")
 load("@stdlib//binascii", "binascii")
 load("@vgs//vault", "vault")
 load("@vgs//http/request", "VGSHttpRequest")
-load("@stdlib//base64", base64="base64")
-load("@vendor//Crypto/Hash/HMAC", HMAC="HMAC")
-load("@vendor//Crypto/Hash/SHA256", SHA256="SHA256")
 load("@stdlib//builtins", builtins="builtins")
 load("@stdlib//json", json="json")
-load("@stdlib//codecs", codecs="codecs")
+load("@stdlib//urllib/parse", parse="parse")
 
 vault = {
     "tok_sandbox_a4JULYBMphkeL2iV7ipwdL": "4111111111111111"
 }
 
 def process(input, ctx):
-    path = input.path
+    #body = json.loads(str(input.body))
     query = input.query_string
-    body = json.loads(str(input.body))
 
-    lst = query.split('=')
-    alias = lst[-1]
+    res = parse.parse_qs(query) # getting dict: {key:list}
+    body = {k: v[0] for k, v in res.items()} # converting to dict: {key:value}
 
-    body['account'] = vault.get(alias)
-    body['query'] = query
-    body['path'] = path
+    body['account'] = vault.get(body['account']) # aka Reveal
 
     input.body = builtins.bytes(json.dumps(body))
     return input
 
 
 def test_process():
-    body = b'{"amount":"10"}'
-    input = VGSHttpRequest("https://VAULT_ID.sandbox.verygoodproxy.com/post?account=tok_sandbox_a4JULYBMphkeL2iV7ipwdL", data=body, headers={}, method='POST')
+    body = b'{}'
+    input = VGSHttpRequest("https://VAULT_ID.sandbox.verygoodproxy.com/post?account=tok_sandbox_a4JULYBMphkeL2iV7ipwdL&amount=100", data=body, headers={}, method='POST')
     response = process(input, None)
-    expected_body = b'{"account":"4111111111111111","amount":"10","path":"/post","query":"account=tok_sandbox_a4JULYBMphkeL2iV7ipwdL"}'
+    expected_body = b'{"account":"4111111111111111","amount":"100"}'
     print(response.body)
     print(expected_body)
     asserts.assert_that(response.body).is_equal_to(expected_body)
