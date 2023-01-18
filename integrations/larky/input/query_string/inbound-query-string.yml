@@ -24,19 +24,17 @@ data:
                   load("@stdlib//builtins", builtins="builtins")
                   load("@stdlib//json", json="json")
                   load("@vgs//vault", "vault")
+                  load("@stdlib//urllib/parse", parse="parse")
 
                   def process(input, ctx):
-                      path = input.path
+                      #body = json.loads(str(input.body))
                       query = input.query_string
-                      body = json.loads(str(input.body))
+                      
+                      res = parse.parse_qs(query) # getting dict: {key:list}
+                      body = {k: v[0] for k, v in res.items()} # converting to dict: {key:value}
+                      
+                      body['account'] = vault.reveal(body['account']) # aka Reveal
 
-                      lst = query.split('=')
-                      alias = lst[-1]
-                      
-                      body['account'] = vault.reveal(alias)
-                      body['query'] = query
-                      body['path'] = path
-                      
                       input.body = builtins.bytes(json.dumps(body))
                       return input
           phase: REQUEST
