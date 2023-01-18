@@ -16,8 +16,7 @@ def process(input, ctx):
     #body = json.loads(str(input.body))
     query = input.query_string
 
-    res = parse.parse_qs(query) # getting dict: {key:list}
-    body = {k: v[0] for k, v in res.items()} # converting to dict: {key:value}
+    body = dict(parse.parse_qsl(query))
 
     body['account'] = vault.get(body['account']) # aka Reveal
 
