@@ -13,7 +13,6 @@ vault = {
 }
 
 def process(input, ctx):
-    #body = json.loads(str(input.body))
     query = input.query_string
 
     body = dict(parse.parse_qsl(query))
