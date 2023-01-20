@@ -27,13 +27,15 @@ data:
                   load("@stdlib//urllib/parse", parse="parse")
 
                   def process(input, ctx):
+                      #body = json.loads(str(input.body))
                       query = input.query_string
-                      
-                      body = dict(parse.parse_qsl(query))
-                      
-                      body['account'] = vault.reveal(body['account']) # aka Reveal
-
-                      input.body = builtins.bytes(json.dumps(body))
+                      qs = dict(parse.parse_qsl(query))
+                      qs['account'] = vault.reveal(qs['account']) # aka Reveal
+                      query = ''
+                      for key,value in qs.items():
+                          query += '='.join([key,value])
+                          query += '&'
+                      input.query_string = query[:-1] # without last '&'
                       return input
           phase: REQUEST
           public_token_generator: UUID
