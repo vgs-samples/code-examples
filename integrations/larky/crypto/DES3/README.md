@@ -13,7 +13,7 @@ https://www.verygoodsecurity.com/docs/larky/test-larky-locally
 
 Example of run:
 
-<IMAGE HERE>
+![image](https://user-images.githubusercontent.com/78090218/214271393-1cd3d448-3145-4d61-b8a4-4049cb3cbb50.png)
 
 #### 2. YAML file:
 
@@ -48,4 +48,4 @@ Example of response:
   }
 ```
 
-<IMAGE HERE>
+![image](https://user-images.githubusercontent.com/78090218/214271426-94b1f69f-b329-441e-9ee9-78e9120f2843.png)
