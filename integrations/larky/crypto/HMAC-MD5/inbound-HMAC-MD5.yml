@@ -1,0 +1,82 @@
+data:
+  - attributes:
+      created_at: '2021-04-26T09:55:37'
+      destination_override_endpoint: 'https://echo.apps.verygood.systems'
+      entries:
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - condition: null
+                expression:
+                  field: PathInfo
+                  operator: begins_with
+                  type: string
+                  values:
+                    - /post
+          id: 3e4ca047-23e2-4397-9a67-d673cedf4cc8
+          id_selector: null
+          operation: REDACT
+          operations:
+            - - name: github.com/verygoodsecurity/common/utils/date-time/Now
+                parameters:
+                  var: ctx.timestamp
+              - name: github.com/verygoodsecurity/common/http/header/Set
+                parameters:
+                  header: Timestamp
+                  value: ctx.timestamp
+              - name: github.com/verygoodsecurity/common/compute/larky/http/Process
+                parameters:
+                  script: |-
+                    load("@vgs//vault", "vault")
+                    load("@stdlib//builtins", builtins="builtins")
+                    load("@stdlib//binascii", "binascii")
+                    load("@stdlib//json", json="json")
+                    load("@stdlib//codecs", codecs="codecs")
+                    load("@vendor//Crypto/Hash/HMAC", HMAC="HMAC")
+                    load("@vendor//Crypto/Hash/MD5", MD5="MD5")
+
+                    def bytes_to_string(by):
+                        return by.decode("utf-8")
+
+                    def string_to_bytes(s):
+                        return builtins.bytes(s, encoding="utf-8")
+
+                    def process(input, ctx):
+                        headers = input.headers
+                        body = json.loads(str(input.body))
+                        KEY = string_to_bytes(vault.reveal('tok_sandbox_bmNL9mL5BjNoxEbyMmQomF'))
+                        ID = headers['x-customer-id']
+                        card_number = vault.reveal(body['account'])
+                        body['account'] = card_number
+                        plainText = '|'.join([card_number, ID])
+                        # create hmac of body
+                        body_as_bytes = string_to_bytes(plainText)
+                        hash_value = HMAC.new(KEY, body_as_bytes, digestmod=MD5).digest()
+                        hmac_header = bytes_to_string(binascii.hexlify(hash_value))
+                        headers['x-hash'] = hmac_header                 
+                        input.headers = headers
+                        input.body = builtins.bytes(json.dumps(body))
+                        return input
+          phase: REQUEST
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - $.email
+          transformer_config_map: null
+      host_endpoint: (.*)\.verygoodproxy\.com
+      id: c891d346-0e1b-49b8-99ac-0754d34f14f2
+      ordinal: null
+      port: 80
+      protocol: http
+      source_endpoint: '*'
+      tags:
+        name: echo.apps.verygood.systems-steel-blue-parallelogram
+        source: RouteContainer
+      updated_at: '2021-05-07T11:45:32'
+    id: c891d346-0e1b-49b8-99ac-0754d34f14f2
+    type: rule_chain
+version: 1

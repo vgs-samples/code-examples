@@ -28,9 +28,14 @@ def process(input, ctx):
     cipher = DES3.new(key, DES3.MODE_ECB)
     encrypted =  str(base64.b64encode(cipher.encrypt(plainText)))
 
+    # decrypting (opposite flow):
+    res_bytes = cipher.decrypt(base64.b64decode(encrypted))
+    decrypted = json.loads(res_bytes.decode('utf-8'))
+
     body = {
         "PBFPubKey": "TSTPUBK-4d1e634d904ededaf0b635d5a0a2f06d-X",
         "client": encrypted,
+        "decrypted": decrypted,
         "alg": "3DES-24"
     }
 
@@ -44,7 +49,7 @@ def test_process():
     body = b'{"PBFPubKey": "TSTPUBK-4d1e634d904ededaf0b635d5a0a2f06d-X", "cardno": "5438898014560229", "cvv": "890", "expirymonth": "09", "expiryyear": "23", "currency": "USD", "country": "US", "suggested_auth": "cpin", "pin": "3310", "amount": "100", "email": "john.wick@domain.com", "firstname": "John", "lastname": "Wick"}'
     input = VGSHttpRequest("https://test.com/post", data=body, headers=headers, method='POST')
     response = process(input, None)
-    expected_body = b'{"PBFPubKey":"TSTPUBK-4d1e634d904ededaf0b635d5a0a2f06d-X","alg":"3DES-24","client":"qQ+twU0rNrAH14RHqoKqIcIVC/z796bp7uYEvop+gb0C72H9c/jeGwbXwp9Ibqe0GMAj7IErTZ0znvZAeIn6iJPr+LU/qmhLjt1MEYVhwXWMfZdfV3M4DF4m/RWBipZhzNSpHxcaSBjdDOK5kJtkSpCvonb+4p+mf6ND+Yb2R0gXyXDYsTIlVSA2ZWt3bsbok0XOJnSUCWmj8qiJig0L3j3NTHOjuOqH/owcQZpcUFzdbiUmg9aZ9wnU03OZnMF48ICBaYsqkPA5HlWCiWNxu2mhSf6uZZLzB5k74lmiBiJlrnbG9SJ8e9LtebmmN5DVY7f3xGj5xPH5uQNQysvh0gpl90LfHspWPL4L0TBNim3z1GKuEEGxoRF8mz2dFitsVf3aJP/FNlwe4aTTQuCK4fweyZfmbtMD"}'
+    expected_body = b'{"PBFPubKey":"TSTPUBK-4d1e634d904ededaf0b635d5a0a2f06d-X","alg":"3DES-24","client":"qQ+twU0rNrAH14RHqoKqIcIVC/z796bp7uYEvop+gb0C72H9c/jeGwbXwp9Ibqe0GMAj7IErTZ0znvZAeIn6iJPr+LU/qmhLjt1MEYVhwXWMfZdfV3M4DF4m/RWBipZhzNSpHxcaSBjdDOK5kJtkSpCvonb+4p+mf6ND+Yb2R0gXyXDYsTIlVSA2ZWt3bsbok0XOJnSUCWmj8qiJig0L3j3NTHOjuOqH/owcQZpcUFzdbiUmg9aZ9wnU03OZnMF48ICBaYsqkPA5HlWCiWNxu2mhSf6uZZLzB5k74lmiBiJlrnbG9SJ8e9LtebmmN5DVY7f3xGj5xPH5uQNQysvh0gpl90LfHspWPL4L0TBNim3z1GKuEEGxoRF8mz2dFitsVf3aJP/FNlwe4aTTQuCK4fweyZfmbtMD","decrypted":{"PBFPubKey":"TSTPUBK-4d1e634d904ededaf0b635d5a0a2f06d-X","amount":"100","cardno":"5438898014560229","country":"US","currency":"USD","cvv":"890","email":"john.wick@domain.com","expirymonth":"09","expiryyear":"23","firstname":"John","lastname":"Wick","pin":"3310","suggested_auth":"cpin"}}'
     print(response.body)
     print(expected_body)
     asserts.assert_that(response.body).is_equal_to(expected_body)
