@@ -54,9 +54,14 @@ data:
                       cipher = DES3.new(key, DES3.MODE_ECB)
                       encrypted =  str(base64.b64encode(cipher.encrypt(plainText)))
 
+                      # decrypting (opposite flow):
+                      res_bytes = cipher.decrypt(base64.b64decode(encrypted))
+                      decrypted = json.loads(res_bytes.decode('utf-8'))
+
                       body = {
                           "PBFPubKey": "TSTPUBK-4d1e634d904ededaf0b635d5a0a2f06d-X",
                           "client": encrypted,
+                          "decrypted": decrypted,
                           "alg": "3DES-24"
                       }
 
