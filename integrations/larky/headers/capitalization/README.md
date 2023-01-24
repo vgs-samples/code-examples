@@ -23,7 +23,7 @@ https://www.verygoodsecurity.com/docs/larky/test-larky-locally
 
 Example of run:
 
-<IMAGE HERE>
+![image](https://user-images.githubusercontent.com/78090218/214271921-0b0028ba-166d-4704-a5c7-8ee8579438c3.png)
 
 #### 2. YAML file:
 
@@ -52,7 +52,9 @@ According to the test above, curl makes all header names in lowercase.
 
 Check also below a sample of the same YAML code result using Postman:
 
-<IMAGE HERE>
+![image](https://user-images.githubusercontent.com/78090218/214271960-9fced90c-3ee9-4886-b9f0-31ba6e469f51.png)
 
-<IMAGE HERE>
+![image](https://user-images.githubusercontent.com/78090218/214271982-5609a5c0-f53e-4a16-a0bb-b58fdee12780.png)
+
   
+"json": {
