@@ -20,7 +20,7 @@ https://www.verygoodsecurity.com/docs/larky/test-larky-locally
 
 Example of run:
 
-<IMAGE HERE>
+![image](https://user-images.githubusercontent.com/78090218/214271797-0a621330-8fa9-4b9c-9e05-2441868d357f.png)
 
 #### 2. YAML file:
 
