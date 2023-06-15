@@ -12,8 +12,8 @@ To be able to run Larky locally, you'll need to setup your local environment:
 https://www.verygoodsecurity.com/docs/larky/test-larky-locally
 
 Example of run:
+<img width="1644" alt="image" src="https://github.com/vgs-samples/code-examples/assets/78090218/031137cb-fd77-4c48-9444-0b826dad9650">
 
-<IMAGE>
 
 #### 2. YAML file:
 
@@ -46,4 +46,5 @@ Example of response:
   }
 ```
 
-<IMAGE>
+<img width="1276" alt="image" src="https://github.com/vgs-samples/code-examples/assets/78090218/f17fdda2-6ed1-4174-9f9f-83d5933cd947">
+
