@@ -1,0 +1,65 @@
+data:
+  - attributes:
+      created_at: '2023-06-15T11:44:36'
+      destination_override_endpoint: 'https://echo.apps.verygood.systems'
+      entries:
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: PathInfo
+                  operator: equals
+                  type: string
+                  values:
+                    - /post
+              - expression:
+                  field: ContentType
+                  operator: equals
+                  type: string
+                  values:
+                    - application/json
+          id: ba2aed5c-b1b3-4c9b-beb3-b636f06d4cb8
+          id_selector: null
+          operation: REDACT
+          operations:
+            - name: github.com/verygoodsecurity/common/compute/larky/http/Process
+              parameters:
+                script: |-
+                  load("@stdlib//json", json="json")
+                  load("@stdlib//codecs", codecs="codecs")
+                  load("@vgs//vault", "vault")
+
+
+                  def process(input, ctx):
+                      # Get JSON body.
+                      body = json.loads(str(input.body))
+                      
+                      body['variables']['input']['pan'] = vault.redact(body['variables']['input']['pan'])
+                      body['variables']['input']['cvv'] = vault.redact(body['variables']['input']['cvv'])
+                       
+                      ## Rewrite body and return response message.
+                      input.body = codecs.encode(json.dumps(body),'utf-8','error', False)
+                      return input
+          phase: REQUEST
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - none
+          transformer_config_map: null
+      host_endpoint: (.*)\.verygoodproxy\.com
+      id: 29dcc461-fd15-43ae-b9ed-d403637d3894
+      ordinal: null
+      port: 80
+      protocol: http
+      source_endpoint: '*'
+      tags:
+        name: Graphql Staging
+        source: RouteContainer
+      updated_at: '2023-06-15T11:47:25'
+    id: 29dcc461-fd15-43ae-b9ed-d403637d3894
+    type: rule_chain
+version: 1
