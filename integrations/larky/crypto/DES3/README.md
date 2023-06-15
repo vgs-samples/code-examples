@@ -13,7 +13,7 @@ https://www.verygoodsecurity.com/docs/larky/test-larky-locally
 
 Example of run:
 
-![image](https://user-images.githubusercontent.com/78090218/214271393-1cd3d448-3145-4d61-b8a4-4049cb3cbb50.png)
+<IMAGE>
 
 #### 2. YAML file:
 
@@ -21,17 +21,14 @@ Upload the YAML to your vault and run (secret here is not real, it was generated
 ```
 curl https://VAULT_ID.sandbox.verygoodproxy.com/post -k \
   -H "Content-type: application/json" \
-  -d '{"PBFPubKey": "TSTPUBK-4d1e634d904ededaf0b635d5a0a2f06d-X", "cardno": "5438898014560229", "cvv": "890", "expirymonth": "09", "expiryyear": "23", "currency": "USD", "country": "US", "suggested_auth": "cpin", "pin": "3310", "amount": "100", "email": "john.wick@domain.com", "firstname": "John", "lastname": "Wick"}'
+  -d '{"cardno": "5438898014560229", "cvv": "890", "expirymonth": "09", "expiryyear": "23", "currency": "USD", "country": "US", "suggested_auth": "cpin", "pin": "3310", "amount": "100", "email": "john.wick@domain.com", "firstname": "John", "lastname": "Wick"}'
 ```
 
 Example of response:
 ```
 "json": {
-    "PBFPubKey": "TSTPUBK-4d1e634d904ededaf0b635d5a0a2f06d-X",
-    "alg": "3DES-24",
-    "client": "qQ+twU0rNrAH14RHqoKqIcIVC/z796bp7uYEvop+gb0C72H9c/jeGwbXwp9Ibqe0GMAj7IErTZ0znvZAeIn6iJPr+LU/qmhLjt1MEYVhwXWMfZdfV3M4DF4m/RWBipZhzNSpHxcaSBjdDOK5kJtkSpCvonb+4p+mf6ND+Yb2R0gXyXDYsTIlVSA2ZWt3bsbok0XOJnSUCWmj8qiJig0L3j3NTHOjuOqH/owcQZpcUFzdbiUmg9aZ9wnU03OZnMF48ICBaYsqkPA5HlWCiWNxu2mhSf6uZZLzB5k74lmiBiJlrnbG9SJ8e9LtebmmN5DVY7f3xGj5xPH5uQNQysvh0gpl90LfHspWPL4L0TBNim3z1GKuEEGxoRF8mz2dFitsVf3aJP/FNlwe4aTTQuCK4fweyZfmbtMD",
+    "client": "AB6bq600zxhpjG9IR+GwO6Dsm+kecGGXo7uQaEELvI/L+Rorfecadg3labXy6eHg/Jsr9AoyDpzlIRanHt4r83Fmu4bRSVshLnJpNahyMLCvIfa+VLhamTA17FqJfwKHpQLG2JXEB1DgKZxJ6CcNPNEwp06css8nST9C+LlXg+vxY00YV3YYlCsbBX2Hkg6brIpDUV1owzy4FBZbtEkFUMZJhRDWMXqZayuiRZAT8FtgIkibrzLRR064I/0a7fXuGBXV+svr//0uz6ck1iXkXYGjg9lJixbfeCUUVm3SCsxLwVPx46LhOsmApFu8kI4MmxyEjysQYD7s0WZREV43Jw==",
     "decrypted": {
-      "PBFPubKey": "TSTPUBK-4d1e634d904ededaf0b635d5a0a2f06d-X",
       "amount": "100",
       "cardno": "5438898014560229",
       "country": "US",
@@ -44,8 +41,9 @@ Example of response:
       "lastname": "Wick",
       "pin": "3310",
       "suggested_auth": "cpin"
-    }
+    },
+    "padding": 3
   }
 ```
 
-![image](https://user-images.githubusercontent.com/78090218/214271426-94b1f69f-b329-441e-9ee9-78e9120f2843.png)
+<IMAGE>
