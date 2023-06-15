@@ -1,0 +1,67 @@
+data:
+  - attributes:
+      created_at: '2023-06-15T13:11:51'
+      destination_override_endpoint: '*'
+      entries:
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: PathInfo
+                  operator: matches
+                  type: string
+                  values:
+                    - /post
+              - expression:
+                  field: ContentType
+                  operator: equals
+                  type: string
+                  values:
+                    - application/json
+          id: 182909ed-1b2a-4e98-9681-b2d7e8e1697e
+          id_selector: null
+          operation: ENRICH
+          operations:
+            - name: github.com/verygoodsecurity/common/compute/larky/http/Process
+              parameters:
+                script: |-
+                  load("@stdlib//json", json="json")
+                  load("@stdlib//builtins", builtins="builtins")
+                  load("@vgs//vault", "vault")
+
+                  def process(input, ctx):
+                      headers = input.headers
+                      protocol = input.url       # returns 'https://'
+                      host = headers['Host']     # returns 'VAULT_ID.sandbox.verygoodproxy.com' for Inbound Route
+                                                 # and 'echo.apps.verygood.systems' for Outbound Route (i.e. upstream)
+                      path = input.path          # returns '/post'
+                      query = input.query_string # returns 'account=homer'
+
+                      headers['x-request-uri'] = protocol + host + path + '?' + query
+                      
+                      input.headers = headers
+                      return input
+          phase: REQUEST
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - $.account_number
+          transformer_config_map: null
+          type: null
+      host_endpoint: echo\.apps\.verygood\.systems
+      id: 0f69eb84-b907-4f14-994f-cbbbf4cef20d
+      ordinal: null
+      port: 80
+      protocol: http
+      source_endpoint: '*'
+      tags:
+        name: brown-circle
+        source: RouteContainer
+      updated_at: '2023-06-15T13:11:51'
+    id: 0f69eb84-b907-4f14-994f-cbbbf4cef20d
+    type: rule_chain
+version: 1
