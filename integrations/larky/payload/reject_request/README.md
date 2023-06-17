@@ -15,7 +15,7 @@ https://www.verygoodsecurity.com/docs/larky/test-larky-locally
 
 Example of run:
 
-<IMAGE>
+<img width="1399" alt="image" src="https://github.com/vgs-samples/code-examples/assets/78090218/29c6bea2-b965-4f6c-a789-7bb37659823d">
 
 #### 2. YAML file:
 
@@ -41,6 +41,4 @@ Traceback (most recent call last):
   File "larky.star", line 17, column 11, in process
 Error in fail: This card is blocked. Request id: 8a19a297bdf81962c68d07af6b7eb8f9.
 ```
-
-<IMAGE>
 
