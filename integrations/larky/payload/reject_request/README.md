@@ -1,4 +1,4 @@
-# json.dumps() + separators
+# Reject request with bad card number
 
 Use-case: sometimes it is required to reject the request so that it can't go to the upstream. VGS Proxy can't generate a response (to client app) so the possible solution is usage of `fail()` method.
 
