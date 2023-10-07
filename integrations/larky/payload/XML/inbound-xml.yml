@@ -1,0 +1,61 @@
+data:
+  - attributes:
+      created_at: '2023-09-28T12:39:30'
+      destination_override_endpoint: 'https://echo.apps.verygood.systems'
+      entries:
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: PathInfo
+                  operator: matches
+                  type: string
+                  values:
+                    - /post
+          id: 3e4ca047-23e2-4397-9a67-d673cedf4cc8
+          id_selector: null
+          operation: REDACT
+          operations:
+            - name: github.com/verygoodsecurity/common/compute/larky/http/Process
+              parameters:
+                script: >-
+                  load("@stdlib//xml/etree/ElementTree",
+                  ElementTree="ElementTree")
+
+                  load("@vgs//vault", "vault")
+
+
+                  def process(input, ctx):
+
+                      root = ElementTree.fromstring(str(input.body))
+                      ssn_element = root.find(".//SSN")
+                      ssn = ssn_element.text
+                      ssn_alias = vault.redact(ssn)
+                      ssn_element.text = ssn_alias
+
+                      input.body = ElementTree.tostring(root, encoding="unicode")
+
+                      return input
+          phase: REQUEST
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - $.email
+          transformer_config_map: null
+      host_endpoint: (.*)\.verygoodproxy\.com
+      id: c891d346-0e1b-49b8-99ac-0754d34f14f2
+      ordinal: null
+      port: 80
+      protocol: http
+      source_endpoint: '*'
+      tags:
+        name: echo.apps.verygood.systems-steel-blue-parallelogram
+        source: RouteContainer
+      updated_at: '2023-10-07T15:09:19'
+    id: c891d346-0e1b-49b8-99ac-0754d34f14f2
+    type: rule_chain
+version: 1
