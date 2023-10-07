@@ -13,7 +13,7 @@ https://www.verygoodsecurity.com/docs/larky/test-larky-locally
 
 Example of run:
 
-<IMAGE HERE>
+![image](https://github.com/vgs-samples/code-examples/assets/78090218/02540bfa-3560-4d05-b358-ee209c0fe211)
 
 #### 2. YAML file:
 
@@ -27,6 +27,6 @@ The file `payload.xml` is also included into the repo.
 
 Expected response:
 
-<IMAGE HERE>
+![image](https://github.com/vgs-samples/code-examples/assets/78090218/726f64ac-a046-4963-8d08-63a6dde9a7d0)
 
-<IMAGE WITH DEBUG>
+![image](https://github.com/vgs-samples/code-examples/assets/78090218/e9cebf9b-b585-4f80-b449-0721d18d1d91)
