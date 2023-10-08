@@ -1,13 +1,6 @@
 load("@stdlib//unittest", "unittest")
 load("@vendor//asserts", "asserts")
-#load("@stdlib//hashlib", "hashlib")
-#load("@stdlib//binascii", "binascii")
-#load("@vgs//vault", "vault")
 load("@vgs//http/request", "VGSHttpRequest")
-#load("@stdlib//base64", base64="base64")
-#load("@stdlib//builtins", builtins="builtins")
-#load("@stdlib//json", json="json")
-#load("@stdlib//codecs", codecs="codecs")
 load("@stdlib//re", re="re")
 
 
