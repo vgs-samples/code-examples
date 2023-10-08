@@ -17,7 +17,7 @@ https://www.verygoodsecurity.com/docs/larky/test-larky-locally
 
 Example of run:
 
-<IMAGE OF TEST>
+![image](https://github.com/vgs-samples/code-examples/assets/78090218/c7256bbc-9a1b-4d87-aba7-2e41be5b776b)
 
 #### 2. YAML file:
 
@@ -39,12 +39,11 @@ Expected response:
   }
 ```
 
+![image](https://github.com/vgs-samples/code-examples/assets/78090218/967182d9-87a6-421e-afd3-b9f182827134)
+
 If to run the same command again, the response will be:
 ```
 Received error from script engine: net.starlark.java.eval.Starlark$UncheckedEvalException: RedactionCommonsException thrown during Starlark evaluation. Request id: ed8babff5de73979cd5ff73b24981bdb.
 ```
 
-
-<IMAGE CLI>
-
-<IMAGE UI>
+![image](https://github.com/vgs-samples/code-examples/assets/78090218/6d2c0c44-4b7b-487b-8c1d-84bc02ab8838)
