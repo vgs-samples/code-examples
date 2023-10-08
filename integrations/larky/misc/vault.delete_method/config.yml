@@ -1,6 +1,6 @@
 data:
   - attributes:
-      created_at: '2023-09-28T12:39:30'
+      created_at: '2023-06-15T11:44:36'
       destination_override_endpoint: 'https://echo.apps.verygood.systems'
       entries:
         - classifiers: {}
@@ -9,33 +9,38 @@ data:
             rules:
               - expression:
                   field: PathInfo
-                  operator: matches
+                  operator: equals
                   type: string
                   values:
                     - /post
-          id: 3e4ca047-23e2-4397-9a67-d673cedf4cc8
+              - expression:
+                  field: ContentType
+                  operator: equals
+                  type: string
+                  values:
+                    - application/json
+          id: ba2aed5c-b1b3-4c9b-beb3-b636f06d4cb8
           id_selector: null
           operation: REDACT
           operations:
             - name: github.com/verygoodsecurity/common/compute/larky/http/Process
               parameters:
                 script: |-
-                  load("@stdlib//xml/etree/ElementTree",
-                  ElementTree="ElementTree")
-
+                  load("@stdlib//builtins", builtins="builtins")
+                  load("@stdlib//json", json="json")
                   load("@vgs//vault", "vault")
-
 
                   def process(input, ctx):
 
-                      root = ElementTree.fromstring(str(input.body))
-                      ssn_element = root.find(".//SSN")
-                      ssn = ssn_element.text
-                      ssn_alias = vault.redact(ssn)
-                      ssn_element.text = ssn_alias
+                      body = json.loads(str(input.body))
 
-                      input.body = ElementTree.tostring(root, encoding="unicode")
+                      if body['action'] == 'reveal':
+                          body['card_number'] = vault.reveal(body['card_number'])
+                      if body['action'] == 'delete':
+                          vault.delete(body['card_number'])
+                          body['card_number'] = 'deleted'
 
+                      input.body = builtins.bytes(json.dumps(body))
                       return input
           phase: REQUEST
           public_token_generator: UUID
@@ -44,18 +49,18 @@ data:
           token_manager: PERSISTENT
           transformer: JSON_PATH
           transformer_config:
-            - $.email
+            - none
           transformer_config_map: null
       host_endpoint: (.*)\.verygoodproxy\.com
-      id: c891d346-0e1b-49b8-99ac-0754d34f14f2
+      id: 29dcc461-fd15-43ae-b9ed-d403637d3894
       ordinal: null
       port: 80
       protocol: http
       source_endpoint: '*'
       tags:
-        name: echo.apps.verygood.systems-steel-blue-parallelogram
+        name: Graphql Staging
         source: RouteContainer
-      updated_at: '2023-10-07T15:09:19'
-    id: c891d346-0e1b-49b8-99ac-0754d34f14f2
+      updated_at: '2023-06-15T11:47:25'
+    id: 29dcc461-fd15-43ae-b9ed-d403637d3894
     type: rule_chain
 version: 1

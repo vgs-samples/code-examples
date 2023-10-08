@@ -1,0 +1,80 @@
+data:
+  - attributes:
+      created_at: '2023-06-15T11:44:36'
+      destination_override_endpoint: 'https://echo.apps.verygood.systems'
+      entries:
+        - classifiers: {}
+          config:
+            condition: AND
+            rules:
+              - expression:
+                  field: PathInfo
+                  operator: equals
+                  type: string
+                  values:
+                    - /post
+              - expression:
+                  field: ContentType
+                  operator: equals
+                  type: string
+                  values:
+                    - application/json
+          id: ba2aed5c-b1b3-4c9b-beb3-b636f06d4cb8
+          id_selector: null
+          operation: REDACT
+          operations:
+            - - name: github.com/verygoodsecurity/common/compute/larky/http/Process
+                parameters:
+                  script: |-
+                    load("@stdlib//builtins", builtins="builtins")
+                    load("@stdlib//json", json="json")
+                    load("@vgs//vault", "vault")
+                    load("@vendor//option/result", safe="safe")
+
+                    safe_loads = safe(json.loads)
+
+                    def process(input, ctx):
+
+                        result = safe_loads(str(input.body))
+
+                        if result != None and result.is_ok:
+                            body = result.unwrap()
+                            cc = body['card_number']
+                            alias = vault.redact(cc)
+                            body['card_number'] = alias
+                            input.body = builtins.bytes(json.dumps(body))
+                        else:
+                            input.body = b'{"message":"Unexpected request"}'
+                        return input
+            - - name: github.com/verygoodsecurity/common/content-type/json/Get
+                parameters:
+                  path: message
+                  var: ctx.message
+            - - name: github.com/verygoodsecurity/common/flow/If
+                parameters:
+                  rightvalue: "Unexpected request"
+                  leftvalue: ctx.message
+                  comparator: "eq"
+              - name: github.com/verygoodsecurity/common/access/Reject
+          phase: REQUEST
+          public_token_generator: UUID
+          targets:
+            - body
+          token_manager: PERSISTENT
+          transformer: JSON_PATH
+          transformer_config:
+            - none
+          transformer_config_map: null
+      host_endpoint: (.*)\.verygoodproxy\.com
+      id: 29dcc461-fd15-43ae-b9ed-d403637d3894
+      ordinal: null
+      port: 80
+      protocol: http
+      source_endpoint: '*'
+      tags:
+        name: Graphql Staging
+        source: RouteContainer
+      updated_at: '2023-06-15T11:47:25'
+    id: 29dcc461-fd15-43ae-b9ed-d403637d3894
+    type: rule_chain
+version: 1

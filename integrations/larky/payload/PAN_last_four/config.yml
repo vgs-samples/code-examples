@@ -20,22 +20,17 @@ data:
             - name: github.com/verygoodsecurity/common/compute/larky/http/Process
               parameters:
                 script: |-
-                  load("@stdlib//xml/etree/ElementTree",
-                  ElementTree="ElementTree")
-
                   load("@vgs//vault", "vault")
-
+                  load("@stdlib//builtins", builtins="builtins")
+                  load("@stdlib//json", json="json")
 
                   def process(input, ctx):
+                      body = json.loads(str(input.body))
+                      
+                      body['last_four'] = body['card_number'][-4:]
+                      body['card_number'] = vault.redact(body['card_number'])
 
-                      root = ElementTree.fromstring(str(input.body))
-                      ssn_element = root.find(".//SSN")
-                      ssn = ssn_element.text
-                      ssn_alias = vault.redact(ssn)
-                      ssn_element.text = ssn_alias
-
-                      input.body = ElementTree.tostring(root, encoding="unicode")
-
+                      input.body = builtins.bytes(json.dumps(body))
                       return input
           phase: REQUEST
           public_token_generator: UUID

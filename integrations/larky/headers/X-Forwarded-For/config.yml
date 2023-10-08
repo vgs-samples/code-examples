@@ -1,15 +1,16 @@
 data:
   - attributes:
-      created_at: '2023-09-28T12:39:30'
+      created_at: '2021-04-26T09:55:37'
       destination_override_endpoint: 'https://echo.apps.verygood.systems'
       entries:
         - classifiers: {}
           config:
             condition: AND
             rules:
-              - expression:
+              - condition: null
+                expression:
                   field: PathInfo
-                  operator: matches
+                  operator: begins_with
                   type: string
                   values:
                     - /post
@@ -20,22 +21,13 @@ data:
             - name: github.com/verygoodsecurity/common/compute/larky/http/Process
               parameters:
                 script: |-
-                  load("@stdlib//xml/etree/ElementTree",
-                  ElementTree="ElementTree")
-
-                  load("@vgs//vault", "vault")
-
-
+                  load("@stdlib//re", re="re")
+                  
                   def process(input, ctx):
-
-                      root = ElementTree.fromstring(str(input.body))
-                      ssn_element = root.find(".//SSN")
-                      ssn = ssn_element.text
-                      ssn_alias = vault.redact(ssn)
-                      ssn_element.text = ssn_alias
-
-                      input.body = ElementTree.tostring(root, encoding="unicode")
-
+                      headers = input.headers
+                      value = headers['X-Forwarded-For']
+                      headers['X-Forwarded-For'] = re.split(",", value)[0] # remove everything except first
+                      input.headers = headers
                       return input
           phase: REQUEST
           public_token_generator: UUID
@@ -55,7 +47,7 @@ data:
       tags:
         name: echo.apps.verygood.systems-steel-blue-parallelogram
         source: RouteContainer
-      updated_at: '2023-10-07T15:09:19'
+      updated_at: '2021-05-07T11:45:32'
     id: c891d346-0e1b-49b8-99ac-0754d34f14f2
     type: rule_chain
 version: 1

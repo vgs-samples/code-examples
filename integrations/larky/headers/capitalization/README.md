@@ -56,5 +56,4 @@ Check also below a sample of the same YAML code result using Postman:
 
 ![image](https://user-images.githubusercontent.com/78090218/214271982-5609a5c0-f53e-4a16-a0bb-b58fdee12780.png)
 
-  
-"json": {
+
