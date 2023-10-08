@@ -1,6 +1,11 @@
-# Modifying X-Forwarded-For header
+# Reject request if JSON body is malformed
 
-Sometimes it's required to hide presence of the Proxy in the middle by erasing all the IPs that are being added to the X-Forwaded-For header.
+A good sample of using the `safe` module which can be a good substitution for the `try except` clause.
+
+Flow:
+- Try to parse JSON body
+- If ok, read the data
+- If fail, reject the request
 
 This sample includes:
 1. Larky test `.star` file that generates the same result due to static input values;
@@ -15,7 +20,7 @@ https://www.verygoodsecurity.com/docs/larky/test-larky-locally
 
 Example of run:
 
-<LARKY TEST IMAGE HERE>
+<IMAGE OF TEST>
 
 #### 2. YAML file:
 
@@ -24,8 +29,15 @@ Upload the YAML to your vault and run:
 curl https://VAULT_ID.ENV.verygoodproxy.com/post -k \
   -H "Content-type: application/json" \
   -d '{
-    "card_number": "4211424211114242"
+    "card_number": "4211424211114242",
   }'
 ```
 
-<IMAGE FROM UI>
+Expected response:
+```
+Operation failed. Request id: 8af945ca82412222b55a2e8466665fb8.
+```
+
+<IMAGE CLI>
+
+<IMAGE UI>
