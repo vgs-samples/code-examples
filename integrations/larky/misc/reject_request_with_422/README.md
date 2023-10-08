@@ -20,7 +20,7 @@ https://www.verygoodsecurity.com/docs/larky/test-larky-locally
 
 Example of run:
 
-<IMAGE OF TEST>
+![image](https://github.com/vgs-samples/code-examples/assets/78090218/cd5324de-7db8-40ca-bb26-0bdcfd5c5a5c)
 
 #### 2. YAML file:
 
@@ -38,6 +38,7 @@ Expected response:
 Operation failed. Request id: 8af945ca82412222b55a2e8466665fb8.
 ```
 
-<IMAGE CLI>
+![image](https://github.com/vgs-samples/code-examples/assets/78090218/1a4d22a7-06c5-437d-a77c-3ed6488dd690)
 
-<IMAGE UI>
+![image](https://github.com/vgs-samples/code-examples/assets/78090218/b599aa6d-6e33-4f96-b4cb-d11f3a7d0f19)
+
