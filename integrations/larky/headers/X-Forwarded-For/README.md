@@ -15,7 +15,7 @@ https://www.verygoodsecurity.com/docs/larky/test-larky-locally
 
 Example of run:
 
-<LARKY TEST IMAGE HERE>
+![image](https://github.com/vgs-samples/code-examples/assets/78090218/b0bccaf7-730a-462d-be90-c2e2a3901664)
 
 #### 2. YAML file:
 
@@ -28,4 +28,5 @@ curl https://VAULT_ID.ENV.verygoodproxy.com/post -k \
   }'
 ```
 
-<IMAGE FROM UI>
+![image](https://github.com/vgs-samples/code-examples/assets/78090218/c0a4d101-e4e5-46a7-b31a-092f2585e247)
+
