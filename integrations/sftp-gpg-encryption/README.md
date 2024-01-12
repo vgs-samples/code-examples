@@ -110,3 +110,4 @@ python quick_start.py decrypt_file
 - To install GPG Keychain use `brew install gpg-suite`
 - Python 3.9.13
 - gpg (GnuPG/MacGPG2) 2.2.34 and libgcrypt 1.8.9
+- This example only demonstrates encrypting/decrypting files. If reveal/redact operations are needed, you will need an additional route filter to reveal/redact the data. https://www.verygoodsecurity.com/docs/features/sftp/#process-csv-files
