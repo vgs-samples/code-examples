@@ -1,37 +1,58 @@
-const fs = require('fs')
-const tls = require('tls')
-const { curly } = require('node-libcurl')
-const {EOL} = require('os');
+const fs = require('fs');
+const tls = require('tls');
+const axios = require('axios');
+const { EOL } = require('os');
+const https = require('https');
 
-const certFilePath = '{CERT_LOCATION}'
-const ca = '/tmp/vgs-outbound-proxy-ca.pem'
-const tlsData = tls.rootCertificates.join(EOL)
-const vgsSelfSigned = fs.readFileSync(certFilePath).toString('utf-8')
-const systemCaAndVgsCa = tlsData + EOL + vgsSelfSigned;
-fs.writeFileSync(ca, systemCaAndVgsCa)
+// Paths to certificate files
+const certFilePath = '{CERT_LOCATION}';
+const caFilePath = '/tmp/vgs-outbound-proxy-ca.pem';
+
+// Read and combine system root certificates with the VGS self-signed certificate
+const tlsData = tls.rootCertificates.join(EOL);
+const vgsSelfSigned = fs.readFileSync(certFilePath).toString('utf-8');
+const combinedCa = tlsData + EOL + vgsSelfSigned;
+fs.writeFileSync(caFilePath, combinedCa);
+
+// Create an HTTPS agent with the combined CA certificates
+const httpsAgent = new https.Agent({
+  ca: combinedCa,
+});
 
 async function run() {
-    return curly.post('{VGS_SAMPLE_ECHO_SERVER}/post', {
-        postFields: JSON.stringify({ account_number: '{ALIAS}' }),
-        httpHeader: ['Content-type: application/json'],
-        caInfo: ca,
-        proxy: 'https://{ACCESS_CREDENTIALS}@{VAULT_HOST}:{SECURE_PORT}',
-        verbose: true,
-    })
+  try {
+    const response = await axios.post(
+      '{VGS_SAMPLE_ECHO_SERVER}/post',
+      { account_number: '{ALIAS}' },
+      {
+        headers: { 'Content-Type': 'application/json' },
+        proxy: {
+          protocol: 'https',
+          host: '{VAULT_HOST}',
+          port: {SECURE_PORT},
+          auth: {
+            username: '{USERNAME}',
+            password: '{PASSWORD}',
+          },
+        },
+        httpsAgent: httpsAgent,
+      }
+    );
+
+    console.log(
+      require('util').inspect(
+        {
+          data: response.data,
+          statusCode: response.status,
+          headers: response.headers,
+        },
+        null,
+        4
+      )
+    );
+  } catch (error) {
+    console.error(`Something went wrong`, { error });
+  }
 }
 
-run()
-    .then(({ data, statusCode, headers }) =>
-        console.log(
-            require('util').inspect(
-                {
-                    data: JSON.parse(data.data),
-                    statusCode,
-                    headers,
-                },
-                null,
-                4,
-            ),
-        ),
-    )
-    .catch((error) => console.error(`Something went wrong`, { error }))
+run();
