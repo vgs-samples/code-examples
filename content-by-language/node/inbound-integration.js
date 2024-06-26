@@ -1,21 +1,19 @@
-const fetch = require('node-fetch');
+const axios = require('axios');
 
 async function getData() {
   let result;
 
   try {
-    result = await fetch('{VAULT_URL}/post', {
-      method: 'POST',
+    result = await axios.post('https://tntqdtbzdpp.SANDBOX.verygoodproxy.com/post', {
+      account_number: 'ACC00000000000000000',
+    }, {
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        account_number: 'ACC00000000000000000',
-      }),
     });
   } catch (e) {
     console.error(e);
   }
 
-  return await result.text();
+  return result.data;
 }
 
 getData().then(response => console.log(response));
