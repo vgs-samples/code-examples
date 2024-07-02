@@ -1,3 +1,6 @@
+// The NODE_EXTRA_CA_CERTS environment variable needs to be set before running the code
+// NODE_EXTRA_CA_CERTS=<path_to_sandbox.pem> node outbound.js
+
 const axios = require('axios');
 const tunnel = require('tunnel');
 
