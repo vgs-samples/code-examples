@@ -1,19 +1,25 @@
 const axios = require('axios');
 
+const instance = axios.create({
+  baseURL: '{VAULT_URL}',
+  headers: {
+      'Content-Type': 'application/json',
+  },
+});
+
 async function getData() {
   let result;
 
   try {
-    result = await axios.post('{VAULT_URL}/post', {
-      account_number: 'ACC00000000000000000',
-    }, {
-      headers: { 'Content-Type': 'application/json' },
+    const response = await instance.post('/post', {
+        account_number: 'ACC00000000000000000',
     });
-  } catch (e) {
-    console.error(e);
-  }
-
-  return result.data;
+    console.log('Response data:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error caught during request:', error.message);
+    throw error;
+}
 }
 
-getData().then(response => console.log(response));
+getData().then(response => console.log('Post request via proxy succeeded.'));
